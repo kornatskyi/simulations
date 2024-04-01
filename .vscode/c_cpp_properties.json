@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/build/_deps/**"
+            ],
+            "defines": []
+        }
+    ],
+    "version": 4
+}
