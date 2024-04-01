@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.16)
 project(Simulations LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)  # or higher if needed
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # Configure warnings for MSVC
+    add_compile_options(/W4 /WX)
+else()
+    # Configure warnings for GCC and Clang
+    add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+endif()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
