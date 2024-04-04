@@ -9,8 +9,8 @@ int main() {
     window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
     window.setPosition(sf::Vector2i(100, 400));
 
-    Entity entity(Vector2(100, 100));
-    Entity entity2(Vector2(200, 200));
+    Entity entity(Vector2(100, 100), 90);
+    Entity entity2(Vector2(200, 200), 30);
     std::vector<Entity> vec{entity, entity2};
     DrawableEntities des(vec);
 
