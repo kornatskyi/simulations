@@ -19,7 +19,11 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
+include_directories(include)
+
 add_executable(Simulations src/main.cpp)
+
+target_include_directories(Simulations PRIVATE include)
 target_link_libraries(Simulations PRIVATE sfml-graphics)
 target_compile_features(Simulations PRIVATE cxx_std_17)
 
