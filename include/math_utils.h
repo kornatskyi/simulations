@@ -5,9 +5,7 @@
 #ifndef MATH_UTILS
 #define MATH_UTILS
 
-inline float dToR(float degrees) {
-    return degrees * (M_PI / 180);
-}
+inline float dToR(float degrees) { return degrees * (M_PI / 180); }
 
 Vector2 rotate(float ox, float oy, float x, float y, float angle) {
     return Vector2(std::cos(dToR(angle)) * (x - ox) -
@@ -16,7 +14,7 @@ Vector2 rotate(float ox, float oy, float x, float y, float angle) {
                        std::cos(dToR(angle)) * (y - oy) + oy);
 }
 
-Vector2 rotate(const Vector2& origin, const Vector2& point, float angle) {
+Vector2 rotate(const Vector2 &origin, const Vector2 &point, float angle) {
     return Vector2(std::cos(dToR(angle)) * (point.x - origin.x) -
                        std::sin(dToR(angle)) * (point.y - origin.y) + origin.x,
                    std::sin(dToR(angle)) * (point.x - origin.x) +
