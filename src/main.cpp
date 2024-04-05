@@ -5,14 +5,14 @@
 #include <vector>
 
 int main() {
+    sf::Clock clock;
+
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Predator/pray simulation.", sf::Style::Titlebar);
     window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
     window.setPosition(sf::Vector2i(100, 400));
 
-    Entity entity(Vector2(100, 100), 90);
-    Entity entity2(Vector2(200, 200), 30);
-    std::vector<Entity> vec{entity, entity2};
-    DrawableEntities des(vec);
+    Environment environment;
+    DrawableEntities des(environment.entities);
 
     // run the main loop
     while (window.isOpen()) {
@@ -22,7 +22,9 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        des.update();
+        sf::Time elapsed = clock.getElapsedTime();
+        clock.restart();
+        des.update(elapsed.asSeconds());
         // draw it
         window.clear();
         window.draw(des);
