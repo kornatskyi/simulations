@@ -1,3 +1,4 @@
+#include "../include/Config.h"
 #include "../include/Entity.h"
 #include "../include/Rendering.h"
 #include <SFML/Graphics.hpp>
@@ -8,8 +9,8 @@
 int main() {
   sf::Clock clock;
 
-  sf::RenderWindow window(sf::VideoMode(1600, 900), "Predator/pray simulation.",
-                          sf::Style::Titlebar);
+  sf::RenderWindow window(sf::VideoMode(Config::WIDTH, Config::WIDTH),
+                          Config::TITLE, sf::Style::Titlebar);
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 

@@ -17,8 +17,8 @@ class DrawableEntities : public sf::Drawable {
       auto &entity = entities[i];
       // Move
       entity.moveForward(elapsedTime);
-      // std::cout << elapsedTime << std::endl;
-      // rotate
+
+      // Rotate
       sf::Vector2f entityPosition = convertToSFMLCoordinate(entity.position);
       auto rotatedPoint =
         rotate(entityPosition.x, entityPosition.y, entityPosition.x - 10,

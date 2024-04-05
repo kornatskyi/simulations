@@ -30,6 +30,7 @@ class Entity {
 
 class Environment {
   public:
+  std::vector<Entity> entities;
   Environment() {
     Entity entity(Vector2(100, -100), 10, 90);
     Entity entity2(Vector2(200, -200), 10, 45);
@@ -41,8 +42,6 @@ class Environment {
       entity, entity2, entity3, entity4, entity5, entity6,
     };
   }
-
-  std::vector<Entity> entities;
 
   private:
 };
