@@ -9,7 +9,7 @@
 int main() {
   sf::Clock clock;
 
-  sf::RenderWindow window(sf::VideoMode(Config::WIDTH, Config::WIDTH),
+  sf::RenderWindow window(sf::VideoMode(Config::WIDTH, Config::HEIGHT),
                           Config::TITLE, sf::Style::Titlebar);
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));

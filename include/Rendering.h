@@ -1,9 +1,10 @@
 #include "../include/Entity.h"
+#include "../include/math_utils.h"
+#include "../include/utils.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <iostream>
 #include <vector>
-
 #ifndef RENDERING_HEADER
 #define RENDERING_HEADER
 
@@ -49,5 +50,4 @@ class DrawableEntities : public sf::Drawable {
     target.draw(m_vertices, states);
   }
 };
-
 #endif
