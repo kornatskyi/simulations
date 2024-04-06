@@ -20,6 +20,11 @@ class Environment {
     };
   }
 
+  /// @brief Constructor which generates `n` Entities with random
+  /// characteristics
+  /// @param n - number of Entities to generate
+  Environment(u_int n) { entities = generateEntities(n); }
+
   private:
   std::vector<Entity> generateEntities(u_int n) {
     srand(Config::defaultSeed);

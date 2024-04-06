@@ -15,7 +15,7 @@ int main() {
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 
-  Environment environment;
+  Environment environment(100000);
   DrawableEntities des(environment.entities);
 
   // run the main loop

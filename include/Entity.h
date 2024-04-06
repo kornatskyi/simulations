@@ -1,11 +1,10 @@
 #ifndef ENTITY_HEADER
 #define ENTITY_HEADER
-
 #include "math_utils.h"
 #include "utils.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-
+// Forward definition for Environemnt
 class Environment;
 
 class Entity {
@@ -14,6 +13,7 @@ class Entity {
   float speed;
   float angle;
   Environment *env;
+
   Entity() {
     position = Vector2(0.f, 0.f);
     speed = 0.f;
