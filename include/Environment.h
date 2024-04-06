@@ -1,7 +1,9 @@
-#include "Entity.h"
-
 #ifndef ENVIRONMENT_HEADER
 #define ENVIRONMENT_HEADER
+#include "math_utils.h"
+#include "utils.h"
+#include <iostream>
+#include <vector>
 
 class Environment {
   public:

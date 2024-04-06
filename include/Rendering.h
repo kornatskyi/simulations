@@ -1,3 +1,5 @@
+#ifndef RENDERING_HEADER
+#define RENDERING_HEADER
 #include "../include/Entity.h"
 #include "../include/math_utils.h"
 #include "../include/utils.h"
@@ -5,8 +7,6 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#ifndef RENDERING_HEADER
-#define RENDERING_HEADER
 
 class DrawableEntities : public sf::Drawable {
   public:

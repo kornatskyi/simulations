@@ -1,23 +1,26 @@
+#ifndef ENTITY_HEADER
+#define ENTITY_HEADER
+
 #include "math_utils.h"
 #include "utils.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#ifndef ENTITY_HEADER
-#define ENTITY_HEADER
+class Environment;
 
 class Entity {
   public:
   Vector2 position;
   float speed;
   float angle;
+  Environment *env;
   Entity() {
     position = Vector2(0.f, 0.f);
     speed = 0.f;
     angle = 0.f;
   }
-  Entity(Vector2 position, float speed, float angle)
-    : position(position), speed(speed), angle(angle) {}
+  Entity(Vector2 position, float speed, float angle, Environment *env = NULL)
+    : position(position), speed(speed), angle(angle), env(env) {}
 
   void moveForward(float elapsedTime) {
     if (isCollidingWithWall(position)) {

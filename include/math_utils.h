@@ -1,9 +1,9 @@
+#ifndef MATH_UTILS
+#define MATH_UTILS
 #include "../include/Config.h"
 #include "../include/utils.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#ifndef MATH_UTILS
-#define MATH_UTILS
 
 float dToR(float degrees) { return degrees * (M_PI / 180); }
 
