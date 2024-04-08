@@ -13,6 +13,7 @@ class DrawableEntities : public sf::Drawable {
   DrawableEntities(std::vector<Entity> &entities) : entities(entities) {}
 
   void update(float elapsedTime) {
+    // VertexArray represents entities
     this->m_vertices = sf::VertexArray(sf::Triangles, 3 * entities.size());
     for (std::size_t i = 0; i < entities.size(); ++i) {
       auto &entity = entities[i];
@@ -24,18 +25,18 @@ class DrawableEntities : public sf::Drawable {
       sf::Vector2f entityPosition = convertToSFMLCoordinate(entity.position);
       auto rotatedPoint =
         rotate(entityPosition.x, entityPosition.y,
-               entityPosition.x - entity.size.x / 2,
-               entityPosition.y + entity.size.x / 2, -entity.angle);
+               entityPosition.x - entity.radius / 2,
+               entityPosition.y + entity.radius / 2, -entity.angle);
       m_vertices[3 * i + 0].position =
         sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
       rotatedPoint =
         rotate(entityPosition.x, entityPosition.y,
-               entityPosition.x - entity.size.x / 2,
-               entityPosition.y - entity.size.x / 2, -entity.angle);
+               entityPosition.x - entity.radius / 2,
+               entityPosition.y - entity.radius / 2, -entity.angle);
       m_vertices[3 * i + 1].position =
         sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
       rotatedPoint = rotate(entityPosition.x, entityPosition.y,
-                            entityPosition.x + entity.size.y,
+                            entityPosition.x + entity.radius,
                             entityPosition.y - 0, -entity.angle);
       m_vertices[3 * i + 2].position =
         sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
@@ -54,24 +55,34 @@ class DrawableEntities : public sf::Drawable {
 
     if (Config::drawBoundary) {
       for (auto &entity : entities) {
-        sf::RectangleShape rect(sf::Vector2f(entity.size.x, entity.size.y));
-        // Set the rectangle's origin to its center for proper rotation
-        rect.setOrigin(entity.size.x / 2, entity.size.y / 2);
 
-        // Assuming convertToSFMLCoordinate properly converts the coordinates
         sf::Vector2f entityPosition = convertToSFMLCoordinate(entity.position);
-        rect.setPosition(entityPosition);
+        sf::CircleShape circle(entity.radius);
+        circle.setPosition(sf::Vector2f(entityPosition.x - entity.radius,
+                                        entityPosition.y - entity.radius));
+        circle.setFillColor(sf::Color::Transparent); // Make inside transparent
+        circle.setOutlineThickness(1);
 
-        // Set rotation (SFML expects degrees)
-        rect.setRotation(-entity.angle +
-                         90); // Assuming entity.angle is in degrees
+        circle.setOutlineColor(sf::Color::Red);
+        target.draw(circle);
 
-        // For a bounding box, consider using an outline
-        rect.setFillColor(sf::Color::Transparent); // Make inside transparent
-        rect.setOutlineColor(sf::Color::Red);      // Color of the bounding box
-        rect.setOutlineThickness(1); // Thickness of the bounding box
+        // sf::RectangleShape rect(sf::Vector2f(entity.size.x, entity.size.y));
+        // // Set the rectangle's origin to its center for proper rotation
+        // rect.setOrigin(entity.size.x / 2, entity.size.y / 2);
 
-        target.draw(rect); // Draw the boundary rectangle
+        // // Assuming convertToSFMLCoordinate properly converts the coordinates
+        // rect.setPosition(entityPosition);
+
+        // // Set rotation (SFML expects degrees)
+        // rect.setRotation(-entity.angle +
+        //                  90); // Assuming entity.angle is in degrees
+
+        // // For a bounding box, consider using an outline
+        // rect.setFillColor(sf::Color::Transparent); // Make inside transparent
+        // rect.setOutlineColor(sf::Color::Red);      // Color of the bounding
+        // box rect.setOutlineThickness(1); // Thickness of the bounding box
+
+        // target.draw(rect); // Draw the boundary rectangle
 
         // Draw entity center
         sf::CircleShape center(2);
