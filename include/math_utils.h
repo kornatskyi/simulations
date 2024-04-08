@@ -13,6 +13,8 @@ Vector2 rotate(float ox, float oy, float x, float y, float angle) {
     std::sin(dToR(angle)) * (x - ox) + std::cos(dToR(angle)) * (y - oy) + oy);
 }
 
+inline sf::Vector2f toSFv2(Vector2 v) { return sf::Vector2(v.x, v.y); }
+
 Vector2 rotate(const Vector2 &origin, const Vector2 &point, float angle) {
   return Vector2(std::cos(dToR(angle)) * (point.x - origin.x) -
                    std::sin(dToR(angle)) * (point.y - origin.y) + origin.x,

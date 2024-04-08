@@ -16,29 +16,32 @@ class DrawableEntities : public sf::Drawable {
     this->m_vertices = sf::VertexArray(sf::Triangles, 3 * entities.size());
     for (std::size_t i = 0; i < entities.size(); ++i) {
       auto &entity = entities[i];
+
       // Move
       entity.moveForward(elapsedTime);
 
       // Rotate
       sf::Vector2f entityPosition = convertToSFMLCoordinate(entity.position);
       auto rotatedPoint =
-        rotate(entityPosition.x, entityPosition.y, entityPosition.x - 10,
-               entityPosition.y + 10, -entity.angle);
+        rotate(entityPosition.x, entityPosition.y,
+               entityPosition.x - entity.size.x / 2,
+               entityPosition.y + entity.size.x / 2, -entity.angle);
       m_vertices[3 * i + 0].position =
         sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
       rotatedPoint =
-        rotate(entityPosition.x, entityPosition.y, entityPosition.x - 10,
-               entityPosition.y - 10, -entity.angle);
+        rotate(entityPosition.x, entityPosition.y,
+               entityPosition.x - entity.size.x / 2,
+               entityPosition.y - entity.size.x / 2, -entity.angle);
       m_vertices[3 * i + 1].position =
         sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
-      rotatedPoint =
-        rotate(entityPosition.x, entityPosition.y, entityPosition.x + 20,
-               entityPosition.y - 0, -entity.angle);
+      rotatedPoint = rotate(entityPosition.x, entityPosition.y,
+                            entityPosition.x + entity.size.y,
+                            entityPosition.y - 0, -entity.angle);
       m_vertices[3 * i + 2].position =
         sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
-      m_vertices[3 * i + 0].color = sf::Color::Red;
-      m_vertices[3 * i + 1].color = sf::Color::Red;
-      m_vertices[3 * i + 2].color = sf::Color::Red;
+      m_vertices[3 * i + 0].color = sf::Color::Blue;
+      m_vertices[3 * i + 1].color = sf::Color::Blue;
+      m_vertices[3 * i + 2].color = sf::Color::Blue;
     }
   }
 
@@ -48,6 +51,36 @@ class DrawableEntities : public sf::Drawable {
   virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
     // draw the vertex array
     target.draw(m_vertices, states);
+
+    if (Config::drawBoundary) {
+      for (auto &entity : entities) {
+        sf::RectangleShape rect(sf::Vector2f(entity.size.x, entity.size.y));
+        // Set the rectangle's origin to its center for proper rotation
+        rect.setOrigin(entity.size.x / 2, entity.size.y / 2);
+
+        // Assuming convertToSFMLCoordinate properly converts the coordinates
+        sf::Vector2f entityPosition = convertToSFMLCoordinate(entity.position);
+        rect.setPosition(entityPosition);
+
+        // Set rotation (SFML expects degrees)
+        rect.setRotation(-entity.angle +
+                         90); // Assuming entity.angle is in degrees
+
+        // For a bounding box, consider using an outline
+        rect.setFillColor(sf::Color::Transparent); // Make inside transparent
+        rect.setOutlineColor(sf::Color::Red);      // Color of the bounding box
+        rect.setOutlineThickness(1); // Thickness of the bounding box
+
+        target.draw(rect); // Draw the boundary rectangle
+
+        // Draw entity center
+        sf::CircleShape center(2);
+        center.setPosition(sf::Vector2f(entityPosition.x - center.getRadius(),
+                                        entityPosition.y - center.getRadius()));
+        center.setFillColor(sf::Color::Red);
+        target.draw(center);
+      }
+    }
   }
 };
 #endif

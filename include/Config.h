@@ -9,6 +9,10 @@ constexpr char TITLE[] = "Predator/pray simulation.";
 
 // Seeds
 constexpr int defaultSeed = 42;
+
+
+//Drawing
+bool drawBoundary = true;
 } // namespace Config
 
 #endif

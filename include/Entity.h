@@ -12,15 +12,18 @@ class Entity {
   Vector2 position;
   float speed;
   float angle;
+  Vector2 size;
   Environment *env;
 
   Entity() {
     position = Vector2(0.f, 0.f);
     speed = 0.f;
     angle = 0.f;
+    size = Vector2(30, 50);
   }
-  Entity(Vector2 position, float speed, float angle, Environment *env = NULL)
-    : position(position), speed(speed), angle(angle), env(env) {}
+  Entity(Vector2 position, float speed, float angle,
+         Vector2 size = Vector2(30, 50), Environment *env = NULL)
+    : position(position), speed(speed), angle(angle), size(size), env(env) {}
 
   void moveForward(float elapsedTime) {
     if (isCollidingWithWall(position)) {
