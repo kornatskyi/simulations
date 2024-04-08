@@ -10,6 +10,22 @@ else()
     add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        add_compile_options(/Zi)
+    else()
+        add_compile_options(-g)
+    endif()
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        add_compile_options(-O0)
+    endif()
+endif()
+
+
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 

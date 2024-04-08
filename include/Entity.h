@@ -42,6 +42,18 @@ class Entity {
     position.y = position.y + std::sin(dToR(angle)) * speed * elapsedTime;
   }
 
+  inline std::string getLabel() const {
+    return "Entity: " + std::to_string(this->position.x) + ", " +
+           std::to_string(this->position.y);
+  }
+
+  // Define operator< for comparing Entity objects
+  bool operator<(const Entity &other) const {
+    // Example comparison logic. Adjust according to your needs.
+    return std::tie(position.x, position.y) <
+           std::tie(other.position.x, other.position.y);
+  }
+
   private:
 };
 

@@ -15,7 +15,7 @@ int main() {
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 
-  Environment environment(10);
+  Environment environment;
   DrawableEntities des(environment.entities);
 
   // run the main loop
@@ -29,6 +29,9 @@ int main() {
     sf::Time elapsed = clock.getElapsedTime();
     clock.restart();
     des.update(elapsed.asSeconds());
+
+    environment.update();
+
     // draw it
     window.clear();
     window.draw(des);

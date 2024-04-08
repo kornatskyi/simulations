@@ -10,6 +10,8 @@
 
 class DrawableEntities : public sf::Drawable {
   public:
+  std::vector<Entity> &entities;
+
   DrawableEntities(std::vector<Entity> &entities) : entities(entities) {}
 
   void update(float elapsedTime) {
@@ -47,9 +49,9 @@ class DrawableEntities : public sf::Drawable {
   }
 
   private:
-  std::vector<Entity> entities;
   sf::VertexArray m_vertices;
-  virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
+  virtual void draw(sf::RenderTarget &target,
+                    sf::RenderStates states) const override {
     // draw the vertex array
     target.draw(m_vertices, states);
 
