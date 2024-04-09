@@ -20,7 +20,6 @@ class DrawableEntities : public sf::Drawable {
     for (std::size_t i = 0; i < entities.size(); ++i) {
       auto &entity = entities[i];
 
-
       // Rotate
       sf::Vector2f entityPosition = convertToSFMLCoordinate(entity.position);
       auto rotatedPoint =
@@ -65,24 +64,6 @@ class DrawableEntities : public sf::Drawable {
 
         circle.setOutlineColor(sf::Color::Red);
         target.draw(circle);
-
-        // sf::RectangleShape rect(sf::Vector2f(entity.size.x, entity.size.y));
-        // // Set the rectangle's origin to its center for proper rotation
-        // rect.setOrigin(entity.size.x / 2, entity.size.y / 2);
-
-        // // Assuming convertToSFMLCoordinate properly converts the coordinates
-        // rect.setPosition(entityPosition);
-
-        // // Set rotation (SFML expects degrees)
-        // rect.setRotation(-entity.angle +
-        //                  90); // Assuming entity.angle is in degrees
-
-        // // For a bounding box, consider using an outline
-        // rect.setFillColor(sf::Color::Transparent); // Make inside transparent
-        // rect.setOutlineColor(sf::Color::Red);      // Color of the bounding
-        // box rect.setOutlineThickness(1); // Thickness of the bounding box
-
-        // target.draw(rect); // Draw the boundary rectangle
 
         // Draw entity center
         sf::CircleShape center(2);

@@ -14,6 +14,7 @@ class Entity {
   float angle;
   float radius;
   float energy;
+  float isAlive = true;
   Environment *env;
 
   Entity() {
@@ -44,11 +45,16 @@ class Entity {
     position.y = position.y + std::sin(dToR(angle)) * speed * elapsedTime;
   }
 
+  /// @brief returns energy when dies
+  /// @return - energy
+  virtual float die();
+
   inline std::string getLabel() const {
     return "Entity: " + std::to_string(this->position.x) + ", " +
            std::to_string(this->position.y);
   }
 
+  // Comparison operators
   // Define operator< for comparing Entity objects
   bool operator<(const Entity &other) const {
     // Example comparison logic. Adjust according to your needs.

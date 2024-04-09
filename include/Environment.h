@@ -10,6 +10,7 @@ class Environment {
   public:
   std::vector<Entity> entities;
   Physics physics;
+
   Environment() {
     Entity entity(Vector2(140, 140), 200, 90);
     Entity entity2(Vector2(150, 150), 200, 45);
@@ -25,7 +26,7 @@ class Environment {
   /// @brief Constructor which generates `n` Entities with random
   /// characteristics
   /// @param n - number of Entities to generate
-  Environment(u_int n) { entities = generateEntities(n); }
+  Environment(u_int n) { entities = generateEntities<Entity>(n); }
 
   void update(float elapsedTime) {
     // Move
@@ -44,9 +45,9 @@ class Environment {
   }
 
   private:
-  std::vector<Entity> generateEntities(u_int n) {
+  template <typename T> std::vector<T> generateEntities(u_int n) {
     srand(Config::defaultSeed);
-    std::vector<Entity> entities{};
+    std::vector<T> entities{};
     for (u_int i = 0; i < n; i++) {
       auto position = Vector2(rand() % Config::WIDTH, rand() % Config::HEIGHT);
       entities.push_back(Entity(position, 70, rand() % 360));

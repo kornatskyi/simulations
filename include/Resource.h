@@ -6,6 +6,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class Resource : public Entity {};
+class Resource : public Entity {
+  public:
+  virtual float die() override {
+    isAlive = false;
+    float deltaEnergy = energy;
+    energy = 0;
+    return deltaEnergy;
+  }
+};
 
 #endif
