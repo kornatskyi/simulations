@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef MATH_UTILS
 #define MATH_UTILS
 #include "../include/Config.h"

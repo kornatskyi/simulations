@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef CONFIG_HEADER
 #define CONFIG_HEADER
 namespace Config {
@@ -10,8 +12,7 @@ constexpr char TITLE[] = "Predator/pray simulation.";
 // Seeds
 constexpr int defaultSeed = 42;
 
-
-//Drawing
+// Drawing
 bool drawBoundary = true;
 } // namespace Config
 

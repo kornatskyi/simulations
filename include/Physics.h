@@ -37,13 +37,21 @@ class Physics {
     std::vector<std::tuple<Entity, Entity>> collidingEntities;
     for (auto const &imap : entitiesByCell) {
 
-      for (auto const &e1 : imap.second) {
-        for (auto const &e2 : imap.second) {
-          if (&e1 != &e2 && areColliding(e1, e2)) {
-            collidingEntities.push_back(std::tuple(e1, e2));
+      for (auto it1 = imap.second.begin(); it1 != imap.second.end(); ++it1) {
+        for (auto it2 = std::next(it1); it2 != imap.second.end(); ++it2) {
+          if (areColliding(*it1, *it2)) {
+            collidingEntities.push_back(std::make_tuple(*it1, *it2));
           }
         }
       }
+
+      // for (auto const &e1 : imap.second) {
+      //   for (auto const &e2 : imap.second) {
+      //     if (&e1 != &e2 && areColliding(e1, e2)) {
+      //       collidingEntities.push_back(std::tuple(e1, e2));
+      //     }
+      //   }
+      // }
     }
     return collidingEntities;
   }

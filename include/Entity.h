@@ -54,6 +54,12 @@ class Entity {
            std::tie(other.position.x, other.position.y);
   }
 
+  bool operator==(const Entity &other) const {
+    return position.x == other.position.x && position.y == other.position.y &&
+           speed == other.speed && angle == other.angle &&
+           radius == other.radius;
+  }
+
   private:
 };
 

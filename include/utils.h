@@ -1,5 +1,7 @@
-#ifndef UTILS
-#define UTILS
+#pragma once
+
+#ifndef UTILS_HEADER
+#define UTILS_HEADER
 
 struct Vector2 {
   float x;
