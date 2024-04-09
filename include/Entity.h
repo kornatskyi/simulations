@@ -21,7 +21,7 @@ class Entity {
     angle = 0.f;
     radius = 30.f;
   }
-  Entity(Vector2 position, float speed, float angle, float radius = 30.f,
+  Entity(Vector2 position, float speed, float angle, float radius = 5.f,
          Environment *env = NULL)
     : position(position), speed(speed), angle(angle), radius(radius), env(env) {
   }

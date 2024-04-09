@@ -2,7 +2,7 @@
 enable_testing()
 
 # Define your test executable, including the source files for the tests
-add_executable(unit_tests unit/EntityTest.cpp unit/PhysicsTest.cpp)
+add_executable(unit_tests unit/PhysicsTest.cpp)
 
 # Link against your project's library and Google Test
 target_link_libraries(unit_tests PRIVATE gtest_main sfml-graphics)

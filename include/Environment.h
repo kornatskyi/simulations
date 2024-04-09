@@ -11,7 +11,6 @@ class Environment {
   std::vector<Entity> entities;
   Physics physics;
   Environment() {
-    // physics = Physics();
     Entity entity(Vector2(140, 140), 200, 90);
     Entity entity2(Vector2(150, 150), 200, 45);
     Entity entity3(Vector2(500, 700), 200, 180);
@@ -26,10 +25,7 @@ class Environment {
   /// @brief Constructor which generates `n` Entities with random
   /// characteristics
   /// @param n - number of Entities to generate
-  Environment(u_int n) {
-    // physics = Physics();
-    entities = generateEntities(n);
-  }
+  Environment(u_int n) { entities = generateEntities(n); }
 
   void update(float elapsedTime) {
     // Move
@@ -39,11 +35,12 @@ class Environment {
 
     auto collidingEntities = physics.collidingEntities(entities);
 
-    for (auto const &t : collidingEntities) {
-      std::cout << std::get<0>(t).getLabel() + " and " +
-                     std::get<1>(t).getLabel() + " are colliding!"
-                << std::endl;
-    }
+    // for (auto const &t : collidingEntities) {
+    //   continue;
+    //   // std::cout << std::get<0>(t).getLabel() + " and " +
+    //   //                std::get<1>(t).getLabel() + " are colliding!"
+    //   //           << std::endl;
+    // }
   }
 
   private:
