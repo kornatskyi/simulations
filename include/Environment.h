@@ -33,9 +33,9 @@ class Environment {
 
   void update(float elapsedTime) {
     // Move
-    // for (auto &entity : entities) {
-    //   entity.moveForward(elapsedTime);
-    // }
+    for (auto &entity : entities) {
+      entity.moveForward(elapsedTime);
+    }
 
     auto collidingEntities = physics.collidingEntities(entities);
 
