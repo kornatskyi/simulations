@@ -14,14 +14,12 @@ class DrawableEntities : public sf::Drawable {
 
   DrawableEntities(std::vector<Entity> &entities) : entities(entities) {}
 
-  void update(float elapsedTime) {
+  void update() {
     // VertexArray represents entities
     this->m_vertices = sf::VertexArray(sf::Triangles, 3 * entities.size());
     for (std::size_t i = 0; i < entities.size(); ++i) {
       auto &entity = entities[i];
 
-      // Move
-      entity.moveForward(elapsedTime);
 
       // Rotate
       sf::Vector2f entityPosition = convertToSFMLCoordinate(entity.position);

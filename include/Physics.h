@@ -39,7 +39,7 @@ class Physics {
 
       for (auto const &e1 : imap.second) {
         for (auto const &e2 : imap.second) {
-          if (&e1 != &e2 && areColliding(e1, e1)) {
+          if (&e1 != &e2 && areColliding(e1, e2)) {
             collidingEntities.push_back(std::tuple(e1, e2));
           }
         }

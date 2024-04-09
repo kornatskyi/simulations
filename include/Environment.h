@@ -31,7 +31,11 @@ class Environment {
     entities = generateEntities(n);
   }
 
-  void update() {
+  void update(float elapsedTime) {
+    // Move
+    // for (auto &entity : entities) {
+    //   entity.moveForward(elapsedTime);
+    // }
 
     auto collidingEntities = physics.collidingEntities(entities);
 

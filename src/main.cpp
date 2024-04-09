@@ -8,7 +8,7 @@
 #include <vector>
 
 int main() {
-  sf::Clock clock;
+  // sf::Clock clock;
 
   sf::RenderWindow window(sf::VideoMode(Config::WIDTH, Config::HEIGHT),
                           Config::TITLE, sf::Style::Titlebar);
@@ -26,11 +26,12 @@ int main() {
       if (event.type == sf::Event::Closed)
         window.close();
     }
-    sf::Time elapsed = clock.getElapsedTime();
-    clock.restart();
-    des.update(elapsed.asSeconds());
+    // sf::Time elapsed = clock.getElapsedTime();
+    // clock.restart();
+    des.update();
 
-    environment.update();
+    // environment.update(elapsed.asSeconds());
+    environment.update(0.01);
 
     // draw it
     window.clear();
