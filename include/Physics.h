@@ -1,50 +1,44 @@
 #ifndef PHYSICS_HEADER
 #define PHYSICS_HEADER
+
 #include "Entity.h"
-#include "math_utils.h"
-#include "utils.h"
+#include <cmath>
 #include <map>
-#include <math.h>
 #include <memory>
 #include <set>
 #include <tuple>
+#include <vector>
 
 class Physics {
   public:
-  std::map<std::tuple<int, int>, std::set<std::shared_ptr<Entity>>>
-    entitiesByCell;
-  float cellSize;
+  using EntityPtr = std::shared_ptr<Entity>;
+  using EntityPair = std::tuple<EntityPtr, EntityPtr>;
+  using Cell = std::tuple<int, int>;
+  using EntitiesSet = std::set<EntityPtr>;
+  using EntityMap = std::map<Cell, EntitiesSet>;
 
-  Physics() {
-    cellSize = 100;
-
-    for (u_int i = 0; i <= u_int(Config::WIDTH / cellSize); i++) {
-      for (u_int j = 0; j <= u_int(Config::HEIGHT / cellSize); j++) {
-        entitiesByCell[std::tuple(i * cellSize, j * cellSize)] =
-          std::set<std::shared_ptr<Entity>>();
+  explicit Physics(float cellSize = 100.0f) : cellSize(cellSize) {
+    for (unsigned int i = 0; i <= Config::WIDTH / cellSize; ++i) {
+      for (unsigned int j = 0; j <= Config::HEIGHT / cellSize; ++j) {
+        entitiesByCell[Cell(i * cellSize, j * cellSize)] = EntitiesSet();
       }
     }
   }
 
-  inline bool areColliding(const std::shared_ptr<Entity> e1,
-                           const std::shared_ptr<Entity> &e2) {
-    return e1->radius + e2->radius >=
-           sqrt(pow((e2->position.x - e1->position.x), 2) +
-                pow((e2->position.y - e1->position.y), 2));
-  }
-
-  std::vector<std::tuple<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>
-  collidingEntities(const std::vector<std::shared_ptr<Entity>> &entities) {
+  std::vector<EntityPair>
+  collidingEntities(const std::vector<EntityPtr> &entities) {
     update(entities);
-    std::vector<std::tuple<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>
-      collidingEntities;
-    for (auto const &imap : entitiesByCell) {
 
-      for (auto it1 = imap.second.begin(); it1 != imap.second.end(); ++it1) {
-        for (auto it2 = std::next(it1); it2 != imap.second.end(); ++it2) {
+    std::vector<EntityPair> collidingEntities;
+    for (const auto &cellEntities : entitiesByCell) {
+      for (auto it1 = cellEntities.second.begin();
+           it1 != cellEntities.second.end(); ++it1) {
+        auto it2 = std::next(it1);
+        while (it2 != cellEntities.second.end()) {
           if (areColliding(*it1, *it2)) {
-            collidingEntities.push_back(std::make_tuple(*it1, *it2));
+            collidingEntities.emplace_back(*it1, *it2);
           }
+          ++it2;
         }
       }
     }
@@ -52,16 +46,24 @@ class Physics {
   }
 
   private:
-  void update(const std::vector<std::shared_ptr<Entity>> &entities) {
+  EntityMap entitiesByCell;
+  float cellSize;
 
-    for (auto const &imap : entitiesByCell) {
-      entitiesByCell[imap.first] = std::set<std::shared_ptr<Entity>>();
+  inline bool areColliding(const EntityPtr &e1, const EntityPtr &e2) const {
+    float dx = e2->position.x - e1->position.x;
+    float dy = e2->position.y - e1->position.y;
+    return e1->radius + e2->radius >= std::hypot(dx, dy);
+  }
+
+  void update(const std::vector<EntityPtr> &entities) {
+    for (auto &[cell, _] : entitiesByCell) {
+      _ = EntitiesSet(); // Clear existing entities in cell
     }
 
-    for (auto &entity : entities) {
-      auto t = std::tuple(int(entity->position.x / cellSize) * cellSize,
-                          int(entity->position.y / cellSize) * cellSize);
-      entitiesByCell.at(t).insert(entity);
+    for (const auto &entity : entities) {
+      Cell cell(int(entity->position.x / cellSize) * cellSize,
+                int(entity->position.y / cellSize) * cellSize);
+      entitiesByCell[cell].insert(entity);
     }
   }
 };
