@@ -1,5 +1,6 @@
 #ifndef ENVIRONMENT_HEADER
 #define ENVIRONMENT_HEADER
+
 #include "Carnivore.h"
 #include "Entity.h"
 #include "Herbivore.h"
@@ -9,77 +10,68 @@
 #include "utils.h"
 #include <iostream>
 #include <memory>
+#include <random>
 #include <vector>
 
 class Environment {
   public:
   std::vector<std::shared_ptr<Entity>> entities;
   Physics physics;
-  Environment() {
-    // physics = Physics();
-    std::shared_ptr<Entity> entity =
-      std::make_shared<Entity>(Entity(Vector2(140, 140), 200, 90));
-    std::shared_ptr<Entity> entity2 =
-      std::make_shared<Herbivore>(Herbivore(Vector2(150, 150), 200, 45));
-    std::shared_ptr<Entity> entity3 =
-      std::make_shared<Resource>(Resource(Vector2(500, 700), 200, 180));
-    std::shared_ptr<Entity> entity4 =
-      std::make_shared<Carnivore>(Carnivore(Vector2(600, 700), 200, 360));
-    std::shared_ptr<Entity> entity5 =
-      std::make_shared<Entity>(Entity(Vector2(300, 800), 200, 270));
-    std::shared_ptr<Entity> entity6 =
-      std::make_shared<Entity>(Entity(Vector2(400, 800), 200, 30));
-    entities = {
-      entity, entity2, entity3, entity4, entity5, entity6,
-    };
-  }
 
-  /// @brief Constructor which generates `n` Entities with random
-  /// characteristics
-  /// @param n - number of Entities to generate
-  Environment(u_int n) {
-    // physics = Physics();
-    entities = generateEntities(n);
-    // auto herbs = generateHerbivores(n);
-    // entities.insert(entities.end(), herbs.begin(), herbs.end());
-  }
+  explicit Environment() { initializeDefaultEntities(); }
+
+  explicit Environment(u_int n) { generateRandomEntities(n); }
 
   void update(float elapsedTime) {
-    // Move
-    for (auto entity : entities) {
+    for (auto &entity : entities) {
       entity->moveForward(elapsedTime);
     }
 
-    auto collidingEntities = physics.collidingEntities(entities);
-
-    for (auto const &t : collidingEntities) {
-      std::cout << std::get<0>(t)->getLabel() + " and " +
-                     std::get<1>(t)->getLabel() + " are colliding!"
+    auto collidingPairs = physics.collidingEntities(entities);
+    for (const auto &[first, second] : collidingPairs) {
+      std::cout << first->getLabel() + " and " + second->getLabel() +
+                     " are colliding!"
                 << std::endl;
     }
   }
 
   private:
-  std::vector<std::shared_ptr<Entity>> generateEntities(u_int n) {
-    srand(Config::defaultSeed);
-    std::vector<std::shared_ptr<Entity>> entities{};
-    for (u_int i = 0; i < n; i++) {
-      auto position = Vector2(rand() % Config::WIDTH, rand() % Config::HEIGHT);
-      entities.push_back(
-        std::make_shared<Herbivore>(Herbivore(position, 70, rand() % 360)));
-    }
-
-    return entities;
+  void initializeDefaultEntities() {
+    entities.emplace_back(std::make_shared<Entity>(Vector2(140, 140), 200, 90));
+    entities.emplace_back(
+      std::make_shared<Herbivore>(Vector2(150, 150), 200, 45));
+    entities.emplace_back(
+      std::make_shared<Resource>(Vector2(500, 700), 200, 180));
+    entities.emplace_back(
+      std::make_shared<Carnivore>(Vector2(600, 700), 200, 360));
+    entities.emplace_back(
+      std::make_shared<Entity>(Vector2(300, 800), 200, 270));
+    entities.emplace_back(std::make_shared<Entity>(Vector2(400, 800), 200, 30));
   }
-  std::vector<Herbivore> generateHerbivores(u_int n) {
-    srand(Config::defaultSeed + 1);
-    std::vector<Herbivore> entities{};
-    for (u_int i = 0; i < n; i++) {
-      auto position = Vector2(rand() % Config::WIDTH, rand() % Config::HEIGHT);
-      entities.push_back(Herbivore(position, 70, rand() % 360));
-    }
 
-    return entities;
+  void generateRandomEntities(u_int n) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distX(0, Config::WIDTH);
+    std::uniform_int_distribution<> distY(0, Config::HEIGHT);
+    std::uniform_int_distribution<> distAngle(0, 360);
+
+    for (u_int i = 0; i < n; ++i) {
+      Vector2 position(distX(gen), distY(gen));
+      int angle = distAngle(gen);
+      // Randomly choose the type of entity to create
+      switch (i % 3) {
+      case 0:
+        entities.emplace_back(std::make_shared<Herbivore>(position, 70, angle));
+        break;
+      case 1:
+        entities.emplace_back(std::make_shared<Carnivore>(position, 70, angle));
+        break;
+      case 2:
+        entities.emplace_back(std::make_shared<Resource>(position, 70, angle));
+        break;
+      }
+    }
   }
 };
 

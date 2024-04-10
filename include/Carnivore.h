@@ -15,7 +15,7 @@ class Carnivore : public Entity {
     energy = 0;
     return deltaEnergy;
   }
-  virtual EntityType getType() const override { return EntityType::HERBIVORE; }
+  virtual EntityType getType() const override { return EntityType::CARNIVORE; }
 };
 
 #endif
