@@ -44,18 +44,17 @@ class Environment {
 
   void update(float elapsedTime) {
     // Move
-    for (auto entity : entities) {
-      entity->moveForward(elapsedTime);
-    }
-
-    // auto collidingEntities = physics.collidingEntities(entities);
-
-    // for (auto const &t : collidingEntities) {
-    //   continue;
-    //   // std::cout << std::get<0>(t).getLabel() + " and " +
-    //   //                std::get<1>(t).getLabel() + " are colliding!"
-    //   //           << std::endl;
+    // for (auto entity : entities) {
+    //   entity->moveForward(elapsedTime);
     // }
+
+    auto collidingEntities = physics.collidingEntities(entities);
+
+    for (auto const &t : collidingEntities) {
+      std::cout << std::get<0>(t)->getLabel() + " and " +
+                     std::get<1>(t)->getLabel() + " are colliding!"
+                << std::endl;
+    }
   }
 
   private:

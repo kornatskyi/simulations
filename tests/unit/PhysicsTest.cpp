@@ -1,6 +1,7 @@
 #include "../../include/Physics.h"
 #include "../../include/Entity.h"
 #include "gtest/gtest.h"
+#include <memory>
 
 class PhysicsTest : public ::testing::Test {
   protected:
@@ -11,24 +12,26 @@ class PhysicsTest : public ::testing::Test {
     // Initialization code here
   }
 
-  Entity CreateEntityAtPosition(float x, float y) {
-    return Entity(Vector2(x, y), 0, 0, collisionDistance);
+  std::shared_ptr<Entity> CreateEntityAtPosition(float x, float y) {
+    return std::make_shared<Entity>(
+      Entity(Vector2(x, y), 0, 0, collisionDistance));
   }
 };
 
 TEST_F(PhysicsTest, NoCollisionForDistantEntities) {
-  Entity entity1 = CreateEntityAtPosition(100, 100);
-  Entity entity2 = CreateEntityAtPosition(300, 300);
-  std::vector<Entity> entities = {entity1, entity2};
+  std::shared_ptr<Entity> entity1 = CreateEntityAtPosition(100, 100);
+  std::shared_ptr<Entity> entity2 = CreateEntityAtPosition(300, 300);
+  std::vector<std::shared_ptr<Entity>> entities = {entity1, entity2};
 
   auto collidingEntities = physics.collidingEntities(entities);
   EXPECT_TRUE(collidingEntities.empty());
 }
 
 TEST_F(PhysicsTest, CollisionForCloseEntities) {
-  Entity entity1 = CreateEntityAtPosition(110, 110);
-  Entity entity2 = CreateEntityAtPosition(110, 110 + collisionDistance - 1);
-  std::vector<Entity> entities = {entity1, entity2};
+  std::shared_ptr<Entity> entity1 = CreateEntityAtPosition(110, 110);
+  std::shared_ptr<Entity> entity2 =
+    CreateEntityAtPosition(110, 110 + collisionDistance - 1);
+  std::vector<std::shared_ptr<Entity>> entities = {entity1, entity2};
 
   auto collidingEntities = physics.collidingEntities(entities);
   EXPECT_FALSE(collidingEntities.empty());
@@ -37,11 +40,12 @@ TEST_F(PhysicsTest, CollisionForCloseEntities) {
 }
 
 TEST_F(PhysicsTest, CorrectNumberOfCollisions) {
-  Entity entity1 = CreateEntityAtPosition(100, 100);
-  Entity entity2 = CreateEntityAtPosition(100, 100 + collisionDistance / 2);
-  Entity entity3 =
+  std::shared_ptr<Entity> entity1 = CreateEntityAtPosition(100, 100);
+  std::shared_ptr<Entity> entity2 =
+    CreateEntityAtPosition(100, 100 + collisionDistance / 2);
+  std::shared_ptr<Entity> entity3 =
     CreateEntityAtPosition(100, 100 + collisionDistance + collisionDistance);
-  std::vector<Entity> entities = {entity1, entity2, entity3};
+  std::vector<std::shared_ptr<Entity>> entities = {entity1, entity2, entity3};
 
   auto collidingEntities = physics.collidingEntities(entities);
   // Expecting entity1 and entity2 to be colliding
