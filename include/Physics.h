@@ -27,22 +27,29 @@ class Physics {
 
   std::vector<EntityPair>
   collidingEntities(const std::vector<EntityPtr> &entities) {
+    // First, update the spatial partitioning or any necessary pre-processing.
     update(entities);
 
-    std::vector<EntityPair> collidingEntities;
-    for (const auto &cellEntities : entitiesByCell) {
-      for (auto it1 = cellEntities.second.begin();
-           it1 != cellEntities.second.end(); ++it1) {
-        auto it2 = std::next(it1);
-        while (it2 != cellEntities.second.end()) {
-          if (areColliding(*it1, *it2)) {
-            collidingEntities.emplace_back(*it1, *it2);
+    std::vector<EntityPair> collidingPairs;
+
+    // Iterate through each cell of entities to check for collisions.
+    for (const auto &[cell, entitiesInCell] : entitiesByCell) {
+      // Use a double loop to compare each entity with every other entity in the
+      // same cell.
+      for (auto firstEntityIt = entitiesInCell.begin();
+           firstEntityIt != entitiesInCell.end(); ++firstEntityIt) {
+        for (auto secondEntityIt = std::next(firstEntityIt);
+             secondEntityIt != entitiesInCell.end(); ++secondEntityIt) {
+          // If two entities are colliding, add them to the list of colliding
+          // pairs.
+          if (areColliding(*firstEntityIt, *secondEntityIt)) {
+            collidingPairs.emplace_back(*firstEntityIt, *secondEntityIt);
           }
-          ++it2;
         }
       }
     }
-    return collidingEntities;
+
+    return collidingPairs;
   }
 
   private:
