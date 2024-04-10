@@ -37,16 +37,18 @@ class Environment {
 
   private:
   void initializeDefaultEntities() {
-    entities.emplace_back(std::make_shared<Entity>(Vector2(140, 140), 200, 90));
     entities.emplace_back(
-      std::make_shared<Herbivore>(Vector2(150, 150), 200, 45));
+      std::make_shared<Entity>(Vector2(140, 140), 200, 90, 20, 0));
     entities.emplace_back(
-      std::make_shared<Resource>(Vector2(500, 700), 200, 180));
+      std::make_shared<Herbivore>(Vector2(150, 150), 200, 45, 20, 0));
     entities.emplace_back(
-      std::make_shared<Carnivore>(Vector2(600, 700), 200, 360));
+      std::make_shared<Resource>(Vector2(500, 700), 200, 180, 20, 0));
     entities.emplace_back(
-      std::make_shared<Entity>(Vector2(300, 800), 200, 270));
-    entities.emplace_back(std::make_shared<Entity>(Vector2(400, 800), 200, 30));
+      std::make_shared<Carnivore>(Vector2(600, 700), 200, 360, 20, 0));
+    entities.emplace_back(
+      std::make_shared<Entity>(Vector2(300, 800), 200, 270, 20, 0));
+    entities.emplace_back(
+      std::make_shared<Entity>(Vector2(400, 800), 200, 30, 20, 0));
   }
 
   void generateRandomEntities(u_int n) {
@@ -62,13 +64,16 @@ class Environment {
       // Randomly choose the type of entity to create
       switch (i % 3) {
       case 0:
-        entities.emplace_back(std::make_shared<Herbivore>(position, 70, angle));
+        entities.emplace_back(
+          std::make_shared<Herbivore>(position, 70, angle, 20, 0));
         break;
       case 1:
-        entities.emplace_back(std::make_shared<Carnivore>(position, 70, angle));
+        entities.emplace_back(
+          std::make_shared<Carnivore>(position, 70, angle, 20, 0));
         break;
       case 2:
-        entities.emplace_back(std::make_shared<Resource>(position, 70, angle));
+        entities.emplace_back(
+          std::make_shared<Resource>(position, 70, angle, 20, 0));
         break;
       }
     }

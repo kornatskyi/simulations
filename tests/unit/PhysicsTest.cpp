@@ -14,7 +14,7 @@ class PhysicsTest : public ::testing::Test {
 
   std::shared_ptr<Entity> CreateEntityAtPosition(float x, float y) {
     return std::make_shared<Entity>(
-      Entity(Vector2(x, y), 0, 0, collisionDistance));
+      Entity(Vector2(x, y), 0, 0, collisionDistance, 0));
   }
 };
 
