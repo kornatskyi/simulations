@@ -10,6 +10,10 @@ class Resource : public Entity {
   public:
   using Entity::Entity; // Inherit constructors from Entity
 
+  Resource(Vector2 position, float speed, float angle, float radius,
+           float energy, Environment *env = nullptr)
+    : Entity(position, 0, angle, radius, energy, env = nullptr) {}
+
   virtual float die() override {
     isAlive = false;
     float deltaEnergy = energy;
