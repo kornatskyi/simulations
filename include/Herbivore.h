@@ -6,6 +6,18 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class Herbivore : public Entity {};
+class Herbivore : public Entity {
+
+  public:
+  using Entity::Entity; // Inherit constructors from Entity
+  EntityType type = EntityType::HERBIVORE;
+
+  virtual float die() override {
+    isAlive = false;
+    float deltaEnergy = energy;
+    energy = 0;
+    return deltaEnergy;
+  }
+};
 
 #endif

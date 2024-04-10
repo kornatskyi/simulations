@@ -7,6 +7,8 @@
 // Forward definition for Environemnt
 class Environment;
 
+enum EntityType { ENTITY, CARNIVORE, HERBIVORE, RESOURCE };
+
 class Entity {
   public:
   Vector2 position;
@@ -15,6 +17,7 @@ class Entity {
   float radius;
   float energy;
   float isAlive = true;
+  EntityType type = EntityType::ENTITY;
   Environment *env;
 
   Entity() {
@@ -47,7 +50,12 @@ class Entity {
 
   /// @brief returns energy when dies
   /// @return - energy
-  virtual float die();
+  virtual float die() {
+    isAlive = false;
+    float deltaEnergy = energy;
+    energy = 0;
+    return deltaEnergy;
+  }
 
   inline std::string getLabel() const {
     return "Entity: " + std::to_string(this->position.x) + ", " +

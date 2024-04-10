@@ -8,6 +8,8 @@
 
 class Resource : public Entity {
   public:
+  EntityType type = EntityType::RESOURCE;
+
   virtual float die() override {
     isAlive = false;
     float deltaEnergy = energy;
