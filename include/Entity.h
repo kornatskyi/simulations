@@ -5,6 +5,7 @@
 #include "utils.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <memory>
 #include <tuple>
 
 // Forward declaration for Environment
@@ -56,6 +57,8 @@ class Entity {
   }
 
   virtual EntityType getType() const { return EntityType::ENTITY; }
+
+  virtual void interact(std::shared_ptr<Entity> other) { return; }
 
   // Comparison operators streamlined with std::tie for readability and
   // maintainability

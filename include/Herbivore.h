@@ -18,6 +18,12 @@ class Herbivore : public Entity {
     return deltaEnergy;
   }
   virtual EntityType getType() const override { return EntityType::HERBIVORE; }
+  virtual void interact(std::shared_ptr<Entity> other) override {
+
+    if (other->getType() == EntityType::RESOURCE) {
+      other->die();
+    }
+  }
 };
 
 #endif

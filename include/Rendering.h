@@ -88,7 +88,7 @@ class EntityRenderer {
 
 class DrawableEntities : public sf::Drawable {
   private:
-  std::vector<std::shared_ptr<Entity>> entities;
+  const std::vector<std::shared_ptr<Entity>> &entities;
   mutable std::vector<sf::VertexArray> m_shapes; // Store individual shapes
   bool boundaryEnabled = Config::drawBoundary;
 

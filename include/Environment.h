@@ -29,26 +29,39 @@ class Environment {
 
     auto collidingPairs = physics.collidingEntities(entities);
     for (const auto &[first, second] : collidingPairs) {
-      std::cout << first->getLabel() + " and " + second->getLabel() +
-                     " are colliding!"
-                << std::endl;
+      first->interact(second);
+      second->interact(first);
+    }
+
+    std::vector<long unsigned int> toDelete;
+    long unsigned int i{0};
+    for (auto &entity : entities) {
+      if (!entity->isAlive) {
+        toDelete.push_back(i);
+      }
+      i++;
+    }
+    for (auto j : toDelete) {
+      if (j < entities.size()) {
+        entities.erase(entities.begin() + j);
+      }
     }
   }
 
   private:
   void initializeDefaultEntities() {
     entities.emplace_back(
-      std::make_shared<Entity>(Vector2(140, 140), 200, 90, 20, 0));
+      std::make_shared<Herbivore>(Vector2(10, 50), 200, 0, 10, 0));
     entities.emplace_back(
-      std::make_shared<Herbivore>(Vector2(150, 150), 200, 45, 20, 0));
-    entities.emplace_back(
-      std::make_shared<Resource>(Vector2(500, 700), 200, 180, 20, 0));
-    entities.emplace_back(
-      std::make_shared<Carnivore>(Vector2(600, 700), 200, 360, 20, 0));
-    entities.emplace_back(
-      std::make_shared<Entity>(Vector2(300, 800), 200, 270, 20, 0));
-    entities.emplace_back(
-      std::make_shared<Entity>(Vector2(400, 800), 200, 30, 20, 0));
+      std::make_shared<Resource>(Vector2(50, 50), 200, 45, 10, 0));
+    // entities.emplace_back(
+    //   std::make_shared<Resource>(Vector2(500, 700), 200, 180, 20, 0));
+    // entities.emplace_back(
+    //   std::make_shared<Carnivore>(Vector2(600, 700), 200, 360, 20, 0));
+    // entities.emplace_back(
+    //   std::make_shared<Entity>(Vector2(300, 800), 200, 270, 20, 0));
+    // entities.emplace_back(
+    //   std::make_shared<Entity>(Vector2(400, 800), 200, 30, 20, 0));
   }
 
   void generateRandomEntities(u_int n) {
