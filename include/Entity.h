@@ -17,7 +17,6 @@ class Entity {
   float radius;
   float energy;
   float isAlive = true;
-  EntityType type = EntityType::ENTITY;
   Environment *env;
 
   Entity() {
@@ -61,6 +60,8 @@ class Entity {
     return "Entity: " + std::to_string(this->position.x) + ", " +
            std::to_string(this->position.y);
   }
+
+  virtual EntityType getType() const { return EntityType::ENTITY; }
 
   // Comparison operators
   // Define operator< for comparing Entity objects

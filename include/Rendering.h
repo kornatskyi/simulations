@@ -13,28 +13,29 @@
 
 class EntityVertex {
   public:
-  Entity &entity;
+  std::shared_ptr<Entity> entity;
   sf::Color color;
 
-  EntityVertex(Entity &entity, sf::Color color = sf::Color::Blue)
+  EntityVertex(std::shared_ptr<Entity> entity,
+               sf::Color color = sf::Color::Blue)
     : entity(entity), color(color) {}
 
   sf::VertexArray getVertices() {
     sf::VertexArray m_vertices = sf::VertexArray(sf::Triangles, 3);
 
     // Rotate
-    sf::Vector2f entityPosition = convertToSFMLCoordinate(entity.position);
+    sf::Vector2f entityPosition = convertToSFMLCoordinate(entity->position);
     auto rotatedPoint = rotate(
-      entityPosition.x, entityPosition.y, entityPosition.x - entity.radius / 2,
-      entityPosition.y + entity.radius / 2, -entity.angle);
+      entityPosition.x, entityPosition.y, entityPosition.x - entity->radius / 2,
+      entityPosition.y + entity->radius / 2, -entity->angle);
     m_vertices[0].position = sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
-    rotatedPoint = rotate(entityPosition.x, entityPosition.y,
-                          entityPosition.x - entity.radius / 2,
-                          entityPosition.y - entity.radius / 2, -entity.angle);
+    rotatedPoint = rotate(
+      entityPosition.x, entityPosition.y, entityPosition.x - entity->radius / 2,
+      entityPosition.y - entity->radius / 2, -entity->angle);
     m_vertices[1].position = sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
     rotatedPoint = rotate(entityPosition.x, entityPosition.y,
-                          entityPosition.x + entity.radius,
-                          entityPosition.y - 0, -entity.angle);
+                          entityPosition.x + entity->radius,
+                          entityPosition.y - 0, -entity->angle);
     m_vertices[2].position = sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
     m_vertices[0].color = color;
     m_vertices[1].color = color;
@@ -57,18 +58,17 @@ class DrawableEntities : public sf::Drawable {
     for (std::size_t i = 0; i < entities.size(); ++i) {
       auto &entity = entities[i];
 
-      auto color = determineColor(*entity);
+      auto color = determineColor(entity);
 
-      sf::VertexArray tempVertices = EntityVertex(*entity, color).getVertices();
+      sf::VertexArray tempVertices = EntityVertex(entity, color).getVertices();
       m_vertices[i * 3 + 0] = tempVertices[0];
       m_vertices[i * 3 + 1] = tempVertices[1];
       m_vertices[i * 3 + 2] = tempVertices[2];
     }
   }
 
-  sf::Color determineColor(const Entity &entity) {
-
-    switch (entity.type) {
+  sf::Color determineColor(const std::shared_ptr<Entity> entity) {
+    switch (entity->getType()) {
     case EntityType::ENTITY:
       return sf::Color::White;
     case EntityType::CARNIVORE:

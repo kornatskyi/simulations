@@ -10,7 +10,6 @@ class Herbivore : public Entity {
 
   public:
   using Entity::Entity; // Inherit constructors from Entity
-  EntityType type = EntityType::HERBIVORE;
 
   virtual float die() override {
     isAlive = false;
@@ -18,6 +17,7 @@ class Herbivore : public Entity {
     energy = 0;
     return deltaEnergy;
   }
+  virtual EntityType getType() const override { return EntityType::HERBIVORE; }
 };
 
 #endif

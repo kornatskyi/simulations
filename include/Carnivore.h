@@ -8,14 +8,14 @@
 
 class Carnivore : public Entity {
   public:
-  EntityType type = EntityType::CARNIVORE;
-
+  using Entity::Entity; // Inherit constructors from Entity
   virtual float die() override {
     isAlive = false;
     float deltaEnergy = energy;
     energy = 0;
     return deltaEnergy;
   }
+  virtual EntityType getType() const override { return EntityType::HERBIVORE; }
 };
 
 #endif

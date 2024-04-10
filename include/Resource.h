@@ -8,7 +8,7 @@
 
 class Resource : public Entity {
   public:
-  EntityType type = EntityType::RESOURCE;
+  using Entity::Entity; // Inherit constructors from Entity
 
   virtual float die() override {
     isAlive = false;
@@ -16,6 +16,7 @@ class Resource : public Entity {
     energy = 0;
     return deltaEnergy;
   }
+  virtual EntityType getType() const override { return EntityType::RESOURCE; }
 };
 
 #endif
