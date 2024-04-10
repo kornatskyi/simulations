@@ -16,12 +16,22 @@ Vector2 rotate(float ox, float oy, float x, float y, float angle) {
 }
 
 inline sf::Vector2f toSFv2(Vector2 v) { return sf::Vector2(v.x, v.y); }
+inline Vector2 toV2(sf::Vector2f v) { return Vector2(v.x, v.y); }
 
 Vector2 rotate(const Vector2 &origin, const Vector2 &point, float angle) {
   return Vector2(std::cos(dToR(angle)) * (point.x - origin.x) -
                    std::sin(dToR(angle)) * (point.y - origin.y) + origin.x,
                  std::sin(dToR(angle)) * (point.x - origin.x) +
                    std::cos(dToR(angle)) * (point.y - origin.y) + origin.y);
+}
+
+sf::Vector2f rotatePointAround(const sf::Vector2f &origin,
+                               const sf::Vector2f &point, float angle) {
+  return sf::Vector2f(std::cos(dToR(angle)) * (point.x - origin.x) -
+                        std::sin(dToR(angle)) * (point.y - origin.y) + origin.x,
+                      std::sin(dToR(angle)) * (point.x - origin.x) +
+                        std::cos(dToR(angle)) * (point.y - origin.y) +
+                        origin.y);
 }
 
 float getAngleWithOx(const Vector2 &velocity) {

@@ -1,5 +1,6 @@
 #ifndef RENDERING_HEADER
 #define RENDERING_HEADER
+
 #include "Carnivore.h"
 #include "Entity.h"
 #include "Herbivore.h"
@@ -7,109 +8,110 @@
 #include "math_utils.h"
 #include "utils.h"
 #include <SFML/Graphics.hpp>
-#include <cmath>
-#include <iostream>
+#include <memory>
 #include <vector>
 
-class EntityVertex {
+class EntityRenderer {
   public:
-  std::shared_ptr<Entity> entity;
-  sf::Color color;
+  static sf::VertexArray
+  createEntityShape(const std::shared_ptr<Entity> &entity,
+                    const sf::Color &color) {
+    sf::VertexArray vertices(sf::Triangles, 3);
 
-  EntityVertex(std::shared_ptr<Entity> entity,
-               sf::Color color = sf::Color::Blue)
-    : entity(entity), color(color) {}
+    // Generate entity's triangle representation
+    sf::Vector2f position = convertToSFMLCoordinate(entity->position);
+    std::array<sf::Vector2f, 3> points = {
+      rotatePointAround(position,
+                        sf::Vector2f(position.x - entity->radius / 2,
+                                     position.y + entity->radius / 2),
+                        -entity->angle),
+      rotatePointAround(position,
+                        sf::Vector2f(position.x - entity->radius / 2,
+                                     position.y - entity->radius / 2),
+                        -entity->angle),
+      rotatePointAround(position,
+                        sf::Vector2f(position.x + entity->radius, position.y),
+                        -entity->angle)};
 
-  sf::VertexArray getVertices() {
-    sf::VertexArray m_vertices = sf::VertexArray(sf::Triangles, 3);
+    for (int i = 0; i < 3; ++i) {
+      vertices[i].position = points[i];
+      vertices[i].color = color;
+    }
 
-    // Rotate
-    sf::Vector2f entityPosition = convertToSFMLCoordinate(entity->position);
-    auto rotatedPoint = rotate(
-      entityPosition.x, entityPosition.y, entityPosition.x - entity->radius / 2,
-      entityPosition.y + entity->radius / 2, -entity->angle);
-    m_vertices[0].position = sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
-    rotatedPoint = rotate(
-      entityPosition.x, entityPosition.y, entityPosition.x - entity->radius / 2,
-      entityPosition.y - entity->radius / 2, -entity->angle);
-    m_vertices[1].position = sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
-    rotatedPoint = rotate(entityPosition.x, entityPosition.y,
-                          entityPosition.x + entity->radius,
-                          entityPosition.y - 0, -entity->angle);
-    m_vertices[2].position = sf::Vector2f(rotatedPoint.x, rotatedPoint.y);
-    m_vertices[0].color = color;
-    m_vertices[1].color = color;
-    m_vertices[2].color = color;
-    return m_vertices;
+    return vertices;
+  }
+
+  static sf::Color determineColor(EntityType type) {
+    switch (type) {
+    case EntityType::CARNIVORE:
+      return sf::Color::Red;
+    case EntityType::HERBIVORE:
+      return sf::Color::Green;
+    case EntityType::RESOURCE:
+      return sf::Color::Blue;
+    default:
+      return sf::Color::White;
+    }
   }
 };
 
 class DrawableEntities : public sf::Drawable {
-  public:
-  std::vector<std::shared_ptr<Entity>> entities;
-
-  DrawableEntities(std::vector<std::shared_ptr<Entity>> entities)
-    : entities(entities) {}
-
-  void update() {
-    // VertexArray represents entities
-    m_vertices = sf::VertexArray(sf::Triangles, 3 * entities.size());
-
-    for (std::size_t i = 0; i < entities.size(); ++i) {
-      auto &entity = entities[i];
-
-      auto color = determineColor(entity);
-
-      sf::VertexArray tempVertices = EntityVertex(entity, color).getVertices();
-      m_vertices[i * 3 + 0] = tempVertices[0];
-      m_vertices[i * 3 + 1] = tempVertices[1];
-      m_vertices[i * 3 + 2] = tempVertices[2];
-    }
-  }
-
-  sf::Color determineColor(const std::shared_ptr<Entity> entity) {
-    switch (entity->getType()) {
-    case EntityType::ENTITY:
-      return sf::Color::White;
-    case EntityType::CARNIVORE:
-      return sf::Color::Red;
-    case EntityType::HERBIVORE:
-      return sf::Color::Blue;
-    case EntityType::RESOURCE:
-      return sf::Color::Green;
-    default:
-      return sf::Color::Magenta;
-    }
-  }
-
   private:
-  sf::VertexArray m_vertices;
-  virtual void draw(sf::RenderTarget &target,
-                    sf::RenderStates states) const override {
-    // draw the vertex array
-    target.draw(m_vertices, states);
+  std::vector<std::shared_ptr<Entity>> entities;
+  mutable sf::VertexArray m_vertices;
+  bool boundaryEnabled = Config::drawBoundary;
 
-    if (Config::drawBoundary) {
-      for (auto entity : entities) {
+  void updateVertices() const {
+    m_vertices.clear();
+    m_vertices.setPrimitiveType(sf::Triangles);
 
-        sf::Vector2f entityPosition = convertToSFMLCoordinate(entity->position);
-        sf::CircleShape circle(entity->radius);
-        circle.setPosition(sf::Vector2f(entityPosition.x - entity->radius,
-                                        entityPosition.y - entity->radius));
-        circle.setFillColor(sf::Color::Transparent); // Make inside transparent
-        circle.setOutlineThickness(1);
-
-        circle.setOutlineColor(sf::Color::Red);
-        target.draw(circle);
-
-        // Draw entity center
-        sf::CircleShape center(2);
-        center.setPosition(sf::Vector2f(entityPosition.x - center.getRadius(),
-                                        entityPosition.y - center.getRadius()));
-        center.setFillColor(sf::Color::Red);
-        target.draw(center);
+    for (const auto &entity : entities) {
+      sf::VertexArray shape = EntityRenderer::createEntityShape(
+        entity, EntityRenderer::determineColor(entity->getType()));
+      for (std::size_t i = 0; i < shape.getVertexCount(); ++i) {
+        m_vertices.append(shape[i]);
       }
     }
   }
+
+  void drawBoundaries(sf::RenderTarget &target, sf::RenderStates states) const {
+    if (!boundaryEnabled)
+      return;
+
+    for (const auto &entity : entities) {
+      sf::Vector2f position = convertToSFMLCoordinate(entity->position);
+
+      // Draw boundary
+      sf::CircleShape boundary(entity->radius);
+      boundary.setPosition(position.x - entity->radius,
+                           position.y - entity->radius);
+      boundary.setFillColor(sf::Color::Transparent);
+      boundary.setOutlineThickness(1);
+      boundary.setOutlineColor(sf::Color::Red);
+      target.draw(boundary, states);
+
+      // Draw entity center
+      sf::CircleShape center(2);
+      center.setPosition(position.x - 2, position.y - 2);
+      center.setFillColor(sf::Color::Red);
+      target.draw(center, states);
+    }
+  }
+
+  public:
+  explicit DrawableEntities(
+    const std::vector<std::shared_ptr<Entity>> &entities)
+    : entities(entities), m_vertices(sf::Triangles) {}
+
+  void setBoundaryEnabled(bool enabled) { boundaryEnabled = enabled; }
+
+  protected:
+  virtual void draw(sf::RenderTarget &target,
+                    sf::RenderStates states) const override {
+    updateVertices();
+    target.draw(m_vertices, states);
+    drawBoundaries(target, states);
+  }
 };
+
 #endif

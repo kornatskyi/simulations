@@ -28,8 +28,6 @@ int main() {
     }
     // sf::Time elapsed = clock.getElapsedTime();
     // clock.restart();
-    des.update();
-
     // environment.update(elapsed.asSeconds());
     environment.update(0.01);
 
