@@ -9,7 +9,6 @@
 
 int main() {
   // sf::Clock clock;
-
   sf::RenderWindow window(sf::VideoMode(Config::WIDTH, Config::HEIGHT),
                           Config::TITLE, sf::Style::Titlebar);
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
@@ -19,6 +18,9 @@ int main() {
   DrawableEntities drawableElements(environment.entities);
   DrawablePhysics drawablePhysics(environment.physics);
 
+  // sf::View view(sf::FloatRect(0, 0, Config::WIDTH, Config::HEIGHT));
+  // view.zoom(2);
+  // window.setView(view);
   // run the main loop
   while (window.isOpen()) {
     // handle events
