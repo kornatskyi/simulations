@@ -1,13 +1,13 @@
 #ifndef RENDERING_HEADER
 #define RENDERING_HEADER
 
-#include "Carnivore.h"
-#include "Entity.h"
-#include "Herbivore.h"
-#include "Physics.h"
-#include "Resource.h"
-#include "math_utils.h"
-#include "utils.h"
+#include "../Environement/Carnivore.h"
+#include "../Environement/Entity.h"
+#include "../Environement/Herbivore.h"
+#include "../Environement/Resource.h"
+#include "../Physics/Physics.h"
+#include "../utils/math_utils.h"
+#include "../utils/utils.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>

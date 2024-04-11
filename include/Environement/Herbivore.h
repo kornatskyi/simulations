@@ -1,8 +1,8 @@
 #ifndef HERBIVORE_HEADER
 #define HERBIVORE_HEADER
+#include "../utils/math_utils.h"
+#include "../utils/utils.h"
 #include "Entity.h"
-#include "math_utils.h"
-#include "utils.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 

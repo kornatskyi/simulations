@@ -1,7 +1,7 @@
 #include "../include/Config.h"
-#include "../include/Entity.h"
-#include "../include/Environment.h"
-#include "../include/Rendering.h"
+#include "../include/Environement/Entity.h"
+#include "../include/Environement/Environment.h"
+#include "../include/Rendering/Rendering.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <iostream>

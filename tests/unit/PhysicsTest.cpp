@@ -1,5 +1,5 @@
-#include "../../include/Physics.h"
-#include "../../include/Entity.h"
+#include "../../include/Physics/Physics.h"
+#include "../../include/Environement/Entity.h"
 #include "gtest/gtest.h"
 #include <memory>
 

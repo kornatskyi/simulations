@@ -2,8 +2,8 @@
 
 #ifndef MATH_UTILS
 #define MATH_UTILS
-#include "../include/Config.h"
-#include "../include/utils.h"
+#include "../Config.h"
+#include "utils.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 

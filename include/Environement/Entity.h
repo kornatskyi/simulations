@@ -1,8 +1,8 @@
 #ifndef ENTITY_HEADER
 #define ENTITY_HEADER
 
-#include "math_utils.h"
-#include "utils.h"
+#include "../utils/math_utils.h"
+#include "../utils/utils.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <memory>

@@ -1,13 +1,13 @@
 #ifndef ENVIRONMENT_HEADER
 #define ENVIRONMENT_HEADER
 
+#include "../Physics/Physics.h"
+#include "../utils/math_utils.h"
+#include "../utils/utils.h"
 #include "Carnivore.h"
 #include "Entity.h"
 #include "Herbivore.h"
-#include "Physics.h"
 #include "Resource.h"
-#include "math_utils.h"
-#include "utils.h"
 #include <iostream>
 #include <memory>
 #include <random>
