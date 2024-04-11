@@ -65,8 +65,8 @@ class Environment {
   }
 
   void generateRandomEntities(u_int n) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    // std::random_device rd;
+    std::mt19937 gen(42);
     std::uniform_int_distribution<> distX(0, Config::WIDTH);
     std::uniform_int_distribution<> distY(0, Config::HEIGHT);
     std::uniform_int_distribution<> distAngle(0, 360);

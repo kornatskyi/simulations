@@ -17,10 +17,10 @@ class Physics {
   using EntitiesSet = std::set<EntityPtr>;
   using EntityMap = std::map<Cell, EntitiesSet>;
 
-  explicit Physics(float cellSize = 100.0f) : cellSize(cellSize) {
-    for (unsigned int i = 0; i <= Config::WIDTH / cellSize; ++i) {
-      for (unsigned int j = 0; j <= Config::HEIGHT / cellSize; ++j) {
-        entitiesByCell[Cell(i * cellSize, j * cellSize)] = EntitiesSet();
+  explicit Physics(float cellSize = 100) : cellSize(cellSize) {
+    for (unsigned int i = 0; i < Config::WIDTH / cellSize; ++i) {
+      for (unsigned int j = 0; j < Config::HEIGHT / cellSize; ++j) {
+        entitiesByCell[Cell(i, j)] = EntitiesSet();
       }
     }
   }
@@ -35,6 +35,10 @@ class Physics {
 
   float getCellSize() { return cellSize; }
 
+  inline Cell getCell(Vector2 p) {
+    return std::tuple<int, int>{p.x / cellSize, p.y / cellSize};
+  }
+
   std::vector<EntityPair>
   collidingEntities(const std::vector<EntityPtr> &entities) {
     // First, update the spatial partitioning or any necessary pre-processing.
@@ -42,19 +46,11 @@ class Physics {
 
     std::vector<EntityPair> collidingPairs;
 
-    // Iterate through each cell of entities to check for collisions.
-    for (const auto &[cell, entitiesInCell] : entitiesByCell) {
-      // Use a double loop to compare each entity with every other entity in the
-      // same cell.
-      for (auto firstEntityIt = entitiesInCell.begin();
-           firstEntityIt != entitiesInCell.end(); ++firstEntityIt) {
-        for (auto secondEntityIt = std::next(firstEntityIt);
-             secondEntityIt != entitiesInCell.end(); ++secondEntityIt) {
-          // If two entities are colliding, add them to the list of colliding
-          // pairs.
-          if (areColliding(*firstEntityIt, *secondEntityIt)) {
-            collidingPairs.emplace_back(*firstEntityIt, *secondEntityIt);
-          }
+    for (auto e1 : entities) {
+      auto cell = getCell(e1->position);
+      for (auto e2 : entitiesByCell[cell]) {
+        if (e1 != e2 && areColliding(e1, e2)) {
+          collidingPairs.emplace_back(e1, e2);
         }
       }
     }
@@ -78,8 +74,7 @@ class Physics {
     }
 
     for (const auto &entity : entities) {
-      Cell cell(int(entity->position.x / cellSize) * cellSize,
-                int(entity->position.y / cellSize) * cellSize);
+      Cell cell(entity->position.x / cellSize, entity->position.y / cellSize);
       entitiesByCell[cell].insert(entity);
     }
   }
