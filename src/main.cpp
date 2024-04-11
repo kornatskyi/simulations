@@ -16,7 +16,8 @@ int main() {
   window.setPosition(sf::Vector2i(100, 400));
 
   Environment environment(100);
-  DrawableEntities des(environment.entities);
+  DrawableEntities drawableElements(environment.entities);
+  DrawablePhysics drawablePhysics(environment.physics);
 
   // run the main loop
   while (window.isOpen()) {
@@ -33,7 +34,8 @@ int main() {
 
     // draw it
     window.clear();
-    window.draw(des);
+    window.draw(drawableElements);
+    window.draw(drawablePhysics);
     window.display();
   }
 

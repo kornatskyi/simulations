@@ -16,7 +16,7 @@
 class Environment {
   public:
   std::vector<std::shared_ptr<Entity>> entities;
-  Physics physics;
+  std::shared_ptr<Physics> physics = std::make_shared<Physics>();
 
   explicit Environment() { initializeDefaultEntities(); }
 
@@ -27,7 +27,7 @@ class Environment {
       entity->moveForward(elapsedTime);
     }
 
-    auto collidingPairs = physics.collidingEntities(entities);
+    auto collidingPairs = physics->collidingEntities(entities);
     for (const auto &[first, second] : collidingPairs) {
       first->interact(second);
       second->interact(first);

@@ -4,6 +4,7 @@
 #include "Carnivore.h"
 #include "Entity.h"
 #include "Herbivore.h"
+#include "Physics.h"
 #include "Resource.h"
 #include "math_utils.h"
 #include "utils.h"
@@ -142,6 +143,28 @@ class DrawableEntities : public sf::Drawable {
 
     if (boundaryEnabled) {
       drawBoundaries(target, states);
+    }
+  }
+};
+
+class DrawablePhysics : public sf::Drawable {
+  public:
+  std::shared_ptr<Physics> physics;
+  DrawablePhysics(std::shared_ptr<Physics> physics) : physics(physics) {}
+
+  private:
+  protected:
+  virtual void draw(sf::RenderTarget &target,
+                    sf::RenderStates states) const override {
+    auto cells = physics->getCells();
+    for (auto &[x, y] : cells) {
+      auto rect = sf::RectangleShape(
+        sf::Vector2f(physics->getCellSize(), physics->getCellSize()));
+      rect.setPosition(x, y);
+      rect.setOutlineColor(sf::Color::Red);
+      rect.setFillColor(sf::Color::Transparent);
+      rect.setOutlineThickness(1);
+      target.draw(rect, states);
     }
   }
 };

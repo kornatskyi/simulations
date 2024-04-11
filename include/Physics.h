@@ -25,6 +25,16 @@ class Physics {
     }
   }
 
+  std::vector<Cell> getCells() {
+    std::vector<Cell> cells;
+    for (auto [cell, _] : entitiesByCell) {
+      cells.push_back(cell);
+    }
+    return cells;
+  }
+
+  float getCellSize() { return cellSize; }
+
   std::vector<EntityPair>
   collidingEntities(const std::vector<EntityPtr> &entities) {
     // First, update the spatial partitioning or any necessary pre-processing.
