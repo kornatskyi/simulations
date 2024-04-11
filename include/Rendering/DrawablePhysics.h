@@ -22,10 +22,12 @@ class DrawablePhysics : public sf::Drawable {
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override {
     auto cells = physics->getCells();
-    for (auto &[x, y] : cells) {
+    for (auto &[i, j] : cells) {
       auto rect = sf::RectangleShape(
         sf::Vector2f(physics->getCellSize(), physics->getCellSize()));
-      rect.setPosition(x, y);
+      rect.setPosition(convertToSFMLCoordinate(i * physics->getCellSize(),
+                                               j * physics->getCellSize() +
+                                                 physics->getCellSize()));
       rect.setOutlineColor(sf::Color::Red);
       rect.setFillColor(sf::Color::Transparent);
       rect.setOutlineThickness(1);
