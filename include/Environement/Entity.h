@@ -39,6 +39,7 @@ class Entity {
   void moveForward(float elapsedTime) {
     auto [newAngle, newPos] =
       adjustMovementForWalls(position, angle, Config::WIDTH, Config::HEIGHT);
+    position = newPos;
     angle = newAngle;
     position.x += std::cos(dToR(angle)) * speed * elapsedTime;
     position.y += std::sin(dToR(angle)) * speed * elapsedTime;
@@ -81,10 +82,19 @@ class Entity {
                                                            float angle,
                                                            float maxWidth,
                                                            float maxHeight) {
-    if (position.x < 0 || position.x > maxWidth)
+    if (position.x < 2) {
       angle = 180.f - angle;
-    if (position.y < 0 || position.y > maxHeight)
+      position.x = 3;
+    } else if (position.x > maxWidth - 2) {
+      angle = 180.f - angle;
+      position.x = maxWidth - 3;
+    } else if (position.y < 2) {
       angle = 360.f - angle;
+      position.y = 3;
+    } else if (position.y > maxHeight - 2) {
+      angle = 360.f - angle;
+      position.y = maxHeight - 3;
+    }
     return {angle, position};
   }
 };
