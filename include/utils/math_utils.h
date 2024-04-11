@@ -38,6 +38,10 @@ float getAngleWithOx(const Vector2 &velocity) {
   return std::atan2(velocity.y, velocity.x);
 }
 
+sf::Vector2f convertToSFMLCoordinate(float x, float y) {
+  return sf::Vector2f(x, -y + Config::HEIGHT);
+}
+
 sf::Vector2f convertToSFMLCoordinate(Vector2 point) {
   return sf::Vector2f(point.x, -point.y + Config::HEIGHT);
 }
