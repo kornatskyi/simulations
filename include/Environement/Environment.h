@@ -78,15 +78,15 @@ class Environment {
       switch (i % 3) {
       case 0:
         entities.emplace_back(
-          std::make_shared<Herbivore>(position, 70, angle, 20, 0));
+          std::make_shared<Herbivore>(position, 70, angle, 20, 10));
         break;
       case 1:
         entities.emplace_back(
-          std::make_shared<Carnivore>(position, 70, angle, 20, 0));
+          std::make_shared<Carnivore>(position, 70, angle, 20, 10));
         break;
       case 2:
         entities.emplace_back(
-          std::make_shared<Resource>(position, 70, angle, 20, 0));
+          std::make_shared<Resource>(position, 70, angle, 20, 10));
         break;
       }
     }

@@ -2,6 +2,7 @@
 #include "../include/Environement/Entity.h"
 #include "../include/Environement/Environment.h"
 #include "../include/Rendering/Rendering.h"
+#include "../include/Rendering/UI.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <iostream>
@@ -14,10 +15,10 @@ int main() {
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 
-  Environment environment(100);
-  DrawableEntities drawableElements(environment.entities);
-  DrawablePhysics drawablePhysics(environment.physics);
-
+  std::shared_ptr<Environment> environment = std::make_shared<Environment>(100);
+  DrawableEntities drawableElements(environment->entities);
+  DrawablePhysics drawablePhysics(environment->physics);
+  UI ui(environment);
   // sf::View view(sf::FloatRect(0, 0, Config::WIDTH, Config::HEIGHT));
   // view.zoom(2);
   // window.setView(view);
@@ -32,7 +33,7 @@ int main() {
     // sf::Time elapsed = clock.getElapsedTime();
     // clock.restart();
     // environment.update(elapsed.asSeconds());
-    environment.update(0.01);
+    environment->update(0.01);
 
     // draw it
     window.clear();
@@ -40,8 +41,10 @@ int main() {
     if (Config::drawPhysics) {
       window.draw(drawablePhysics);
     }
+    window.draw(ui);
     window.display();
   }
 
   return 0;
 }
+
