@@ -9,13 +9,12 @@
 #include <vector>
 
 int main() {
-  // sf::Clock clock;
   sf::RenderWindow window(sf::VideoMode(Config::WIDTH, Config::HEIGHT),
                           Config::TITLE, sf::Style::Titlebar);
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 
-  std::shared_ptr<Environment> environment = std::make_shared<Environment>(100);
+  std::shared_ptr<Environment> environment = std::make_shared<Environment>(1000);
   DrawableEntities drawableElements(environment->entities);
   DrawablePhysics drawablePhysics(environment->physics);
   UI ui(environment);
@@ -23,16 +22,19 @@ int main() {
   // view.zoom(2);
   // window.setView(view);
   // run the main loop
+
+  sf::Clock clock;
+  float lastTime = 0;
+  float fps = 0;
   while (window.isOpen()) {
+    clock.restart();
     // handle events
     sf::Event event;
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed)
         window.close();
     }
-    // sf::Time elapsed = clock.getElapsedTime();
-    // clock.restart();
-    // environment.update(elapsed.asSeconds());
+
     environment->update(0.01);
 
     // draw it
@@ -42,9 +44,11 @@ int main() {
       window.draw(drawablePhysics);
     }
     window.draw(ui);
+    window.draw(ui.getText("FPS: " + std::to_string(int(fps)),
+                           sf::Vector2f(Config::WIDTH - 200, 10)));
     window.display();
+    fps = 1.f / clock.getElapsedTime().asSeconds();
   }
 
   return 0;
 }
-

@@ -15,6 +15,13 @@ class UI : public sf::Drawable {
     totalEnergy = initText();
   }
 
+  sf::Text getText(std::string text, sf::Vector2f p) {
+    auto t = this->initText();
+    t.setString(text);
+    t.setPosition(p);
+    return t;
+  }
+
   protected:
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override {
