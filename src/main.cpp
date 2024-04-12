@@ -37,7 +37,9 @@ int main() {
     // draw it
     window.clear();
     window.draw(drawableElements);
-    window.draw(drawablePhysics);
+    if (Config::drawPhysics) {
+      window.draw(drawablePhysics);
+    }
     window.display();
   }
 

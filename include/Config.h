@@ -14,6 +14,7 @@ constexpr int defaultSeed = 42;
 
 // Drawing
 bool drawBoundary = true;
+bool drawPhysics = false;
 } // namespace Config
 
 #endif
