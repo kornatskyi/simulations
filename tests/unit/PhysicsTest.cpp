@@ -23,8 +23,8 @@ TEST_F(PhysicsTest, NoCollisionForDistantEntities) {
   std::shared_ptr<Entity> entity2 = CreateEntityAtPosition(300, 300);
   std::vector<std::shared_ptr<Entity>> entities = {entity1, entity2};
 
-  auto collidingEntities = physics.collidingEntities(entities);
-  EXPECT_TRUE(collidingEntities.empty());
+  auto getCollidingEntities = physics.getCollidingEntities(entities);
+  EXPECT_TRUE(getCollidingEntities.empty());
 }
 
 TEST_F(PhysicsTest, CollisionForCloseEntities) {
@@ -33,10 +33,11 @@ TEST_F(PhysicsTest, CollisionForCloseEntities) {
     CreateEntityAtPosition(110, 110 + collisionDistance - 1);
   std::vector<std::shared_ptr<Entity>> entities = {entity1, entity2};
 
-  auto collidingEntities = physics.collidingEntities(entities);
-  EXPECT_FALSE(collidingEntities.empty());
-  EXPECT_EQ(collidingEntities.size(), 1u);
-  EXPECT_EQ(collidingEntities.front(), std::make_tuple(entity1, entity2));
+  auto getCollidingEntities = physics.getCollidingEntities(entities);
+  EXPECT_FALSE(getCollidingEntities.empty());
+  EXPECT_EQ(getCollidingEntities.size(), 1u);
+  EXPECT_TRUE(getCollidingEntities.find(std::make_tuple(entity1, entity2)) !=
+              getCollidingEntities.end());
 }
 
 TEST_F(PhysicsTest, CorrectNumberOfCollisions) {
@@ -47,10 +48,10 @@ TEST_F(PhysicsTest, CorrectNumberOfCollisions) {
     CreateEntityAtPosition(100, 100 + collisionDistance + collisionDistance);
   std::vector<std::shared_ptr<Entity>> entities = {entity1, entity2, entity3};
 
-  auto collidingEntities = physics.collidingEntities(entities);
+  auto getCollidingEntities = physics.getCollidingEntities(entities);
   // Expecting entity1 and entity2 to be colliding
   // Not expecting entity3 to be colliding with either entity1 or entity2
-  EXPECT_EQ(collidingEntities.size(), 1u);
+  EXPECT_EQ(getCollidingEntities.size(), 1u);
 }
 
 // Add more tests to cover edge cases, error conditions, and typical use cases.

@@ -27,7 +27,7 @@ class Environment {
       entity->moveForward(elapsedTime);
     }
 
-    auto collidingPairs = physics->collidingEntities(entities);
+    auto collidingPairs = physics->getCollidingEntities(entities);
     for (const auto &[first, second] : collidingPairs) {
       first->interact(second);
       second->interact(first);

@@ -38,13 +38,15 @@ class Physics {
   inline Cell getCell(Vector2 p) {
     return std::tuple<int, int>{p.x / cellSize, p.y / cellSize};
   }
-
-  std::vector<EntityPair>
-  collidingEntities(const std::vector<EntityPtr> &entities) {
+  /// @brief Returns a set of tuples of entities that are colliding.
+  /// @param entities
+  /// @return
+  std::set<EntityPair>
+  getCollidingEntities(const std::vector<EntityPtr> &entities) {
     // First, update the spatial partitioning or any necessary pre-processing.
     update(entities);
 
-    std::vector<EntityPair> collidingPairs;
+    std::set<EntityPair> collidingPairs;
 
     // Utility lambda to check and handle potential collisions with entities in
     // a specific cell
@@ -55,8 +57,10 @@ class Physics {
       auto it = entitiesByCell.find(cell);
       if (it != entitiesByCell.end()) {
         for (auto e2 : it->second) {
-          if (e1 != e2 && areColliding(e1, e2)) {
-            collidingPairs.emplace_back(e1, e2);
+          bool isCollisionAlreadyDetected =
+            collidingPairs.find(EntityPair{e2, e1}) == collidingPairs.end();
+          if (e1 != e2 && isCollisionAlreadyDetected && areColliding(e1, e2)) {
+            collidingPairs.insert(EntityPair{e1, e2});
           }
         }
       }

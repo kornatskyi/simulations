@@ -14,7 +14,9 @@ int main() {
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 
-  std::shared_ptr<Environment> environment = std::make_shared<Environment>(1000);
+  // std::shared_ptr<Environment> environment = std::make_shared<Environment>();
+  std::shared_ptr<Environment> environment =
+    std::make_shared<Environment>(1000);
   DrawableEntities drawableElements(environment->entities);
   DrawablePhysics drawablePhysics(environment->physics);
   UI ui(environment);
