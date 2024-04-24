@@ -32,7 +32,6 @@ class Environment {
       first->interact(second);
       second->interact(first);
     }
-
     std::vector<long unsigned int> toDelete;
     long unsigned int i{0};
     for (auto &entity : entities) {
@@ -41,6 +40,9 @@ class Environment {
       }
       i++;
     }
+
+    // Removing in reverse order
+    std::reverse(toDelete.begin(), toDelete.end());
     for (auto j : toDelete) {
       if (j < entities.size()) {
         entities.erase(entities.begin() + j);
