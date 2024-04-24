@@ -58,8 +58,8 @@ class Physics {
       if (it != entitiesByCell.end()) {
         for (auto e2 : it->second) {
           bool isCollisionAlreadyDetected =
-            collidingPairs.find(EntityPair{e2, e1}) == collidingPairs.end();
-          if (e1 != e2 && isCollisionAlreadyDetected && areColliding(e1, e2)) {
+            collidingPairs.find(EntityPair{e2, e1}) != collidingPairs.end();
+          if (e1 != e2 && !isCollisionAlreadyDetected && areColliding(e1, e2)) {
             collidingPairs.insert(EntityPair{e1, e2});
           }
         }
