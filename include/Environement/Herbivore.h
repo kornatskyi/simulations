@@ -11,17 +11,12 @@ class Herbivore : public Entity {
   public:
   using Entity::Entity; // Inherit constructors from Entity
 
-  virtual float die() override {
-    isAlive = false;
-    float deltaEnergy = energy;
-    energy = 0;
-    return deltaEnergy;
-  }
+  virtual void die() override { isAlive = false; }
   virtual EntityType getType() const override { return EntityType::HERBIVORE; }
   virtual void interact(std::shared_ptr<Entity> other) override {
-
     if (other->getType() == EntityType::RESOURCE) {
       other->die();
+      energy += other->energy;
     }
   }
 };

@@ -9,12 +9,24 @@
 class Carnivore : public Entity {
   public:
   using Entity::Entity; // Inherit constructors from Entity
-  virtual float die() override {
-    isAlive = false;
-    float deltaEnergy = energy;
-    energy = 0;
-    return deltaEnergy;
+
+  virtual void die() override { isAlive = false; }
+
+  virtual void interact(std::shared_ptr<Entity> other) override {
+    if (other->getType() == EntityType::HERBIVORE) {
+      other->die();
+      energy += other->energy;
+    }
   }
+
+  void moveForward(float elapsedTime) override {
+    Entity::moveForward(elapsedTime);
+    lifetime -= (10 * elapsedTime);
+    if (lifetime <= 0) {
+      die();
+    }
+  }
+
   virtual EntityType getType() const override { return EntityType::CARNIVORE; }
 };
 

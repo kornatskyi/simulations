@@ -33,10 +33,19 @@ class Environment {
       second->interact(first);
     }
     std::vector<long unsigned int> toDelete;
+    std::vector<std::shared_ptr<Entity>> newEntities;
+
     long unsigned int i{0};
     for (auto &entity : entities) {
       if (!entity->isAlive) {
         toDelete.push_back(i);
+
+        // Dead Carnivore entities going to be converted into Resourse
+        if (entity->energy > 0 && entity->type == EntityType::CARNIVORE) {
+          newEntities.push_back(std::make_shared<Resource>(
+            Resource(entity->position, 0.f, 0.f, 20.f, entity->energy,
+            this)));
+        }
       }
       i++;
     }
@@ -47,6 +56,11 @@ class Environment {
       if (j < entities.size()) {
         entities.erase(entities.begin() + j);
       }
+    }
+
+    // add new entities to the list of entities
+    for (auto e : newEntities) {
+      entities.push_back(e);
     }
   }
 

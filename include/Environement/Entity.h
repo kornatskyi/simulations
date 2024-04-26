@@ -22,21 +22,27 @@ class Entity {
   float energy;
   bool isAlive;
   Environment *env;
+  float lifetime = 10.f;
+  EntityType type;
 
   // Default constructor simplified
   Entity()
     : position(0.f, 0.f), speed(0.1f), angle(0.f), radius(20.f), energy(0.f),
-      isAlive(true), env(nullptr) {}
+      isAlive(true), env(nullptr) {
+    type = EntityType::ENTITY;
+  }
 
   // Parameterized constructor with default parameters removed for clarity
   Entity(Vector2 position, float speed, float angle, float radius, float energy,
          Environment *env = nullptr)
     : position(position), speed(speed), angle(angle), radius(radius),
-      energy(energy), isAlive(true), env(env) {}
+      energy(energy), isAlive(true), env(env) {
+    type = EntityType::ENTITY;
+  }
 
   virtual ~Entity() = default; // Virtual destructor for base class
 
-  void moveForward(float elapsedTime) {
+  virtual void moveForward(float elapsedTime) {
     auto [newAngle, newPos] =
       adjustMovementForWalls(position, angle, Config::WIDTH, Config::HEIGHT);
     position = newPos;
@@ -45,19 +51,14 @@ class Entity {
     position.y += std::sin(dToR(angle)) * speed * elapsedTime;
   }
 
-  virtual float die() {
-    isAlive = false;
-    float releasedEnergy = energy;
-    energy = 0.f;
-    return releasedEnergy;
-  }
+  virtual void die() { isAlive = false; }
 
   inline std::string getLabel() const {
     return "Entity: " + std::to_string(position.x) + ", " +
            std::to_string(position.y);
   }
 
-  virtual EntityType getType() const { return EntityType::ENTITY; }
+  virtual EntityType getType() const { return type; }
 
   virtual void interact(std::shared_ptr<Entity> other) { return; }
 

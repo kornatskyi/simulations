@@ -1,8 +1,8 @@
 #ifndef RESOURCE_HEADER
 #define RESOURCE_HEADER
-#include "Entity.h"
 #include "../utils/math_utils.h"
 #include "../utils/utils.h"
+#include "Entity.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -14,12 +14,7 @@ class Resource : public Entity {
            float energy, Environment *env = nullptr)
     : Entity(position, 0, angle, radius, energy, env = nullptr) {}
 
-  virtual float die() override {
-    isAlive = false;
-    float deltaEnergy = energy;
-    energy = 0;
-    return deltaEnergy;
-  }
+  virtual void die() override { isAlive = false; }
   virtual EntityType getType() const override { return EntityType::RESOURCE; }
 };
 
