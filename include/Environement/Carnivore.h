@@ -14,6 +14,7 @@ class Carnivore : public Entity {
             float energy, Environment *env = nullptr)
     : Entity(position, speed, angle, radius, energy, env = nullptr) {
     type = EntityType::CARNIVORE;
+    lifetime = 10;
   }
 
   virtual void die() override { isAlive = false; }
@@ -27,13 +28,23 @@ class Carnivore : public Entity {
 
   void moveForward(float elapsedTime) override {
     Entity::moveForward(elapsedTime);
-    lifetime -= (10 * elapsedTime);
+    lifetime -= elapsedTime;
     if (lifetime <= 0) {
       die();
     }
   }
 
   virtual EntityType getType() const override { return EntityType::CARNIVORE; }
+
+  virtual std::shared_ptr<Entity> reproduce() override {
+    const float energyToSplit = 10;
+    if (energy > energyToSplit) {
+      energy -= energyToSplit;
+      return std::make_shared<Carnivore>(position, speed, angle - 180, radius,
+                                         energyToSplit, env);
+    }
+    return nullptr;
+  }
 };
 
 #endif

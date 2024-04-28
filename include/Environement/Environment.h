@@ -38,6 +38,13 @@ class Environment {
 
     long unsigned int i{0};
     for (auto &entity : entities) {
+      // Reproduction
+      auto newEntity = entity->reproduce();
+      if (newEntity != nullptr) {
+        newEntities.push_back(newEntity);
+      }
+
+      // Collect dead entities
       if (!entity->isAlive) {
         toDelete.push_back(i);
 

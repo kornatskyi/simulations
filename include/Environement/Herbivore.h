@@ -25,6 +25,15 @@ class Herbivore : public Entity {
       energy += other->energy;
     }
   }
+  virtual std::shared_ptr<Entity> reproduce() override {
+    const float energyToSplit = 10;
+    if (energy > energyToSplit) {
+      energy -= energyToSplit;
+      return std::make_shared<Herbivore>(position, speed, angle + 180, radius,
+                                         energyToSplit, env);
+    }
+    return nullptr;
+  }
 };
 
 #endif

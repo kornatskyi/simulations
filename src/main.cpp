@@ -18,7 +18,7 @@ int main() {
 
   // std::shared_ptr<Environment> environment = std::make_shared<Environment>();
   std::shared_ptr<Environment> environment =
-    std::make_shared<Environment>(1000);
+    std::make_shared<Environment>(100);
   DrawableEntities drawableElements(environment->entities);
   DrawablePhysics drawablePhysics(environment->physics);
   UI ui(environment);

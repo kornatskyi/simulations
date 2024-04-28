@@ -17,7 +17,7 @@ class Physics {
   using EntitiesSet = std::set<EntityPtr>;
   using EntityMap = std::map<Cell, EntitiesSet>;
 
-  explicit Physics(float cellSize = 100) : cellSize(cellSize) {
+  explicit Physics(float cellSize = 50) : cellSize(cellSize) {
     for (unsigned int i = 0; i < Config::WIDTH / cellSize; ++i) {
       for (unsigned int j = 0; j < Config::HEIGHT / cellSize; ++j) {
         entitiesByCell[Cell(i, j)] = EntitiesSet();

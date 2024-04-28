@@ -60,6 +60,8 @@ class Entity {
 
   virtual void interact(std::shared_ptr<Entity> other) = 0;
 
+  virtual std::shared_ptr<Entity> reproduce() = 0;
+
   // Comparison operators streamlined with std::tie for readability and
   // maintainability
   bool operator<(const Entity &other) const {
