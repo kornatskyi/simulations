@@ -10,6 +10,12 @@ class Carnivore : public Entity {
   public:
   using Entity::Entity; // Inherit constructors from Entity
 
+  Carnivore(Vector2 position, float speed, float angle, float radius,
+            float energy, Environment *env = nullptr)
+    : Entity(position, speed, angle, radius, energy, env = nullptr) {
+    type = EntityType::CARNIVORE;
+  }
+
   virtual void die() override { isAlive = false; }
 
   virtual void interact(std::shared_ptr<Entity> other) override {

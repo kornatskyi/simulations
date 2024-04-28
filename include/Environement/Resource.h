@@ -12,7 +12,9 @@ class Resource : public Entity {
 
   Resource(Vector2 position, float speed, float angle, float radius,
            float energy, Environment *env = nullptr)
-    : Entity(position, 0, angle, radius, energy, env = nullptr) {}
+    : Entity(position, 0, angle, radius, energy, env = nullptr) {
+    type = EntityType::RESOURCE;
+  }
 
   virtual void die() override { isAlive = false; }
   virtual EntityType getType() const override { return EntityType::RESOURCE; }
