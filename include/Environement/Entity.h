@@ -40,8 +40,6 @@ class Entity {
     type = EntityType::ENTITY;
   }
 
-  virtual ~Entity() = default; // Virtual destructor for base class
-
   virtual void moveForward(float elapsedTime) {
     auto [newAngle, newPos] =
       adjustMovementForWalls(position, angle, Config::WIDTH, Config::HEIGHT);
@@ -51,7 +49,7 @@ class Entity {
     position.y += std::sin(dToR(angle)) * speed * elapsedTime;
   }
 
-  virtual void die() { isAlive = false; }
+  virtual void die() = 0;
 
   inline std::string getLabel() const {
     return "Entity: " + std::to_string(position.x) + ", " +
@@ -60,7 +58,7 @@ class Entity {
 
   virtual EntityType getType() const { return type; }
 
-  virtual void interact(std::shared_ptr<Entity> other) { return; }
+  virtual void interact(std::shared_ptr<Entity> other) = 0;
 
   // Comparison operators streamlined with std::tie for readability and
   // maintainability
@@ -76,6 +74,8 @@ class Entity {
                                          other.speed, other.angle, other.radius,
                                          other.energy, other.isAlive);
   }
+
+  virtual ~Entity() = default; // Virtual destructor for base class
 
   private:
   // Helper method to adjust entity movement if colliding with walls
@@ -99,5 +99,37 @@ class Entity {
     return {angle, position};
   }
 };
+
+// class EntityBuilder {
+//   public:
+//   EntityBuilder &setPosition(const Vector2 &pos) {
+//     entity.position = pos;
+//     return *this;
+//   }
+//   EntityBuilder &setSpeed(float speed) {
+//     entity.speed = speed;
+//     return *this;
+//   }
+//   EntityBuilder &setAngle(float angle) {
+//     entity.angle = angle;
+//     return *this;
+//   }
+//   EntityBuilder &setRadius(float radius) {
+//     entity.radius = radius;
+//     return *this;
+//   }
+//   EntityBuilder &setEnergy(float energy) {
+//     entity.energy = energy;
+//     return *this;
+//   }
+
+//   std::shared_ptr<Entity> build() { return std::make_shared<Entity>(entity);
+//   }
+
+//   private:
+//   Entity entity;
+// };
+
+// class EntityFactory {};
 
 #endif

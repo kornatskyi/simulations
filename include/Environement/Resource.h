@@ -16,6 +16,7 @@ class Resource : public Entity {
 
   virtual void die() override { isAlive = false; }
   virtual EntityType getType() const override { return EntityType::RESOURCE; }
+  virtual void interact(std::shared_ptr<Entity> other) override { return; };
 };
 
 #endif

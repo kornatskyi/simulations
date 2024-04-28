@@ -1,5 +1,5 @@
 #include "../../include/Physics/Physics.h"
-#include "../../include/Environement/Entity.h"
+#include "../../include/Environement/Carnivore.h"
 #include "gtest/gtest.h"
 #include <memory>
 
@@ -13,8 +13,8 @@ class PhysicsTest : public ::testing::Test {
   }
 
   std::shared_ptr<Entity> CreateEntityAtPosition(float x, float y) {
-    return std::make_shared<Entity>(
-      Entity(Vector2(x, y), 0, 0, collisionDistance, 0));
+    return std::make_shared<Carnivore>(
+      Carnivore(Vector2(x, y), 0, 0, collisionDistance, 0));
   }
 };
 
