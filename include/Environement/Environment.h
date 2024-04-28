@@ -1,6 +1,7 @@
 #ifndef ENVIRONMENT_HEADER
 #define ENVIRONMENT_HEADER
 
+#include "../EnvConfig.h"
 #include "../Physics/Physics.h"
 #include "../utils/math_utils.h"
 #include "../utils/utils.h"
@@ -43,8 +44,7 @@ class Environment {
         // Dead Carnivore entities going to be converted into Resourse
         if (entity->energy > 0 && entity->type == EntityType::CARNIVORE) {
           newEntities.push_back(std::make_shared<Resource>(
-            Resource(entity->position, 0.f, 0.f, 20.f, entity->energy,
-            this)));
+            Resource(entity->position, 0.f, 0.f, 20.f, entity->energy, this)));
         }
       }
       i++;
@@ -93,16 +93,19 @@ class Environment {
       // Randomly choose the type of entity to create
       switch (i % 3) {
       case 0:
-        entities.emplace_back(
-          std::make_shared<Herbivore>(position, 70, angle, 20, 10));
+        entities.emplace_back(std::make_shared<Herbivore>(
+          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
+          EnvConfig::entityEnergy));
         break;
       case 1:
-        entities.emplace_back(
-          std::make_shared<Carnivore>(position, 70, angle, 20, 10));
+        entities.emplace_back(std::make_shared<Carnivore>(
+          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
+          EnvConfig::entityEnergy));
         break;
       case 2:
-        entities.emplace_back(
-          std::make_shared<Resource>(position, 70, angle, 20, 10));
+        entities.emplace_back(std::make_shared<Resource>(
+          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
+          EnvConfig::entityEnergy));
         break;
       }
     }
