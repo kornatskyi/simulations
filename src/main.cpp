@@ -5,7 +5,9 @@
 #include "../include/Rendering/UI.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 int main() {
@@ -27,7 +29,10 @@ int main() {
 
   sf::Clock clock;
   float lastTime = 0;
-  float fps = 0;
+  float currentFps = 0;
+  std::string fpsToDraw = std::to_string(currentFps);
+  float fpsRenderPeriod = 0;
+
   while (window.isOpen()) {
     clock.restart();
     // handle events
@@ -46,10 +51,18 @@ int main() {
       window.draw(drawablePhysics);
     }
     window.draw(ui);
-    window.draw(ui.getText("FPS: " + std::to_string(int(fps)),
-                           sf::Vector2f(Config::WIDTH - 200, 10)));
+    if (fpsRenderPeriod > 1) {
+      std::ostringstream oss;
+      oss << std::fixed << std::setprecision(1) << currentFps;
+      fpsToDraw = oss.str(); // "60.1"
+
+      fpsRenderPeriod = 0;
+    }
+    window.draw(
+      ui.getText("FPS: " + fpsToDraw, sf::Vector2f(Config::WIDTH - 200, 10)));
     window.display();
-    fps = 1.f / clock.getElapsedTime().asSeconds();
+    currentFps = 1.f / clock.getElapsedTime().asSeconds();
+    fpsRenderPeriod += clock.getElapsedTime().asSeconds();
   }
 
   return 0;
