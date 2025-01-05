@@ -8,18 +8,18 @@
 class UI : public sf::Drawable {
 public:
   explicit UI(std::shared_ptr<Environment> env);
-  sf::Text getText(std::string text, sf::Vector2f p);
+  std::unique_ptr<sf::Text> getText(std::string text, sf::Vector2f p);
 
 protected:
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
 
 private:
-  sf::Text initText();
+  std::unique_ptr<sf::Text> initText();
   std::shared_ptr<Environment> env;
   sf::Font font;
-  mutable sf::Text entitiesCount;
-  mutable sf::Text totalEnergy;
+  std::unique_ptr<sf::Text> entitiesCount;
+  std::unique_ptr<sf::Text> totalEnergy;
 };
 
 #endif // UI_HEADER
