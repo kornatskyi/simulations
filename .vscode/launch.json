@@ -3,28 +3,16 @@
     "configurations": [
         {
             "name": "Debug Simulations",
-            "type": "cppdbg",
+            "type": "cppdbg", // Use "cppvsdbg" for MSVC, or "cppdbg" for GCC/Clang
             "request": "launch",
-            // Resolved by CMake Tools:
-            "program": "${command:cmake.launchTargetPath}",
+            "program": "${workspaceFolder}/build/bin/Simulations",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "python import sys; sys.path.append('/usr/share/gcc/python/');sys.path.insert(0, '/usr/bin/python3');from libstdcxx.v6.printers import register_libstdcxx_printers;register_libstdcxx_printers(None)",
-                    "ignoreFailures": false
-                },
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-          
-                
-            ]
+            "environment": [],
+            "preLaunchTask": "Build Simulations",
+            "internalConsoleOptions": "neverOpen",
+            "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
 }

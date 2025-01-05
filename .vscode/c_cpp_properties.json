@@ -3,9 +3,13 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/build/_deps/**"
+                "${workspaceFolder}/libs/SFML-3.0.0/include",
+                "${workspaceFolder}/include"
             ],
-            "defines": []
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64"
         }
     ],
     "version": 4
