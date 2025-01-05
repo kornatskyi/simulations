@@ -44,19 +44,22 @@ private:
   createTriangleShape(const std::shared_ptr<Entity> &entity,
                       const sf::Color &color) {
     sf::VertexArray vertices(sf::PrimitiveType::Triangles, 3);
-    sf::Vector2f position = convertToSFMLCoordinate(entity->position);
+    sf::Vector2f position = entity->position;
+
     std::array<sf::Vector2f, 3> points = {
-        rotatePointAround(position,
-                          sf::Vector2f(position.x - entity->radius / 2,
-                                       position.y + entity->radius / 2),
-                          -entity->angle),
-        rotatePointAround(position,
-                          sf::Vector2f(position.x - entity->radius / 2,
-                                       position.y - entity->radius / 2),
-                          -entity->angle),
-        rotatePointAround(position,
-                          sf::Vector2f(position.x + entity->radius, position.y),
-                          -entity->angle)};
+        MathUtils::rotatePointAround(
+            position,
+            sf::Vector2f(position.x - entity->radius / 2,
+                         position.y + entity->radius / 2),
+            entity->angle),
+        MathUtils::rotatePointAround(
+            position,
+            sf::Vector2f(position.x - entity->radius / 2,
+                         position.y - entity->radius / 2),
+            entity->angle),
+        MathUtils::rotatePointAround(
+            position, sf::Vector2f(position.x + entity->radius, position.y),
+            entity->angle)};
 
     for (int i = 0; i < 3; ++i) {
       vertices[i].position = points[i];
@@ -74,7 +77,7 @@ private:
 
     sf::Vertex topLeft, bottomLeft, topRight, bottomRight;
 
-    sf::Vector2f position = convertToSFMLCoordinate(entity->position);
+    sf::Vector2f position = entity->position;
 
     float size = entity->radius; // Assuming radius is used to determine the
                                  // size of the square

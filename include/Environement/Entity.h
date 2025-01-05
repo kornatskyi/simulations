@@ -15,7 +15,7 @@ class Environment;
 enum class EntityType { ENTITY, CARNIVORE, HERBIVORE, RESOURCE };
 
 class Entity {
- public:
+public:
   Vector2 position;
   float speed;
   float angle;
@@ -28,26 +28,16 @@ class Entity {
 
   // Default constructor simplified
   Entity()
-      : position(0.f, 0.f),
-        speed(0.1f),
-        angle(0.f),
-        radius(20.f),
-        energy(0.f),
-        isAlive(true),
-        env(nullptr) {
+      : position(0.f, 0.f), speed(0.1f), angle(0.f), radius(20.f), energy(0.f),
+        isAlive(true), env(nullptr) {
     type = EntityType::ENTITY;
   }
 
   // Parameterized constructor with default parameters removed for clarity
   Entity(Vector2 position, float speed, float angle, float radius, float energy,
          Environment *env = nullptr)
-      : position(position),
-        speed(speed),
-        angle(angle),
-        radius(radius),
-        energy(energy),
-        isAlive(true),
-        env(env) {
+      : position(position), speed(speed), angle(angle), radius(radius),
+        energy(energy), isAlive(true), env(env) {
     type = EntityType::ENTITY;
   }
 
@@ -56,8 +46,8 @@ class Entity {
         adjustMovementForWalls(position, angle, Config::WIDTH, Config::HEIGHT);
     position = newPos;
     angle = newAngle;
-    position.x += std::cos(dToR(angle)) * speed * elapsedTime;
-    position.y += std::sin(dToR(angle)) * speed * elapsedTime;
+    position.x += std::cos(MathUtils::dToR(angle)) * speed * elapsedTime;
+    position.y += std::sin(MathUtils::dToR(angle)) * speed * elapsedTime;
   }
 
   virtual void die() = 0;
@@ -88,9 +78,9 @@ class Entity {
                                          other.energy, other.isAlive);
   }
 
-  virtual ~Entity() = default;  // Virtual destructor for base class
+  virtual ~Entity() = default; // Virtual destructor for base class
 
- private:
+private:
   // Helper method to adjust entity movement if colliding with walls
   static std::tuple<float, Vector2> adjustMovementForWalls(Vector2 position,
                                                            float angle,

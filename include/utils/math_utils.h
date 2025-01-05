@@ -1,48 +1,27 @@
 #pragma once
 
-#ifndef MATH_UTILS
-#define MATH_UTILS
 #include "../Config.h"
 #include "utils.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
+namespace MathUtils {
 
-float dToR(float degrees) { return degrees * (M_PI / 180); }
-
-Vector2 rotate(float ox, float oy, float x, float y, float angle) {
-  return Vector2(
-    std::cos(dToR(angle)) * (x - ox) - std::sin(dToR(angle)) * (y - oy) + ox,
-    std::sin(dToR(angle)) * (x - ox) + std::cos(dToR(angle)) * (y - oy) + oy);
-}
-
-inline sf::Vector2f toSFv2(Vector2 v) { return sf::Vector2(v.x, v.y); }
-inline Vector2 toV2(sf::Vector2f v) { return Vector2(v.x, v.y); }
+inline float dToR(float degrees) { return degrees * (M_PI / 180.0f); }
 
 Vector2 rotate(const Vector2 &origin, const Vector2 &point, float angle) {
-  return Vector2(std::cos(dToR(angle)) * (point.x - origin.x) -
-                   std::sin(dToR(angle)) * (point.y - origin.y) + origin.x,
-                 std::sin(dToR(angle)) * (point.x - origin.x) +
-                   std::cos(dToR(angle)) * (point.y - origin.y) + origin.y);
+  float rad = dToR(angle);
+  float cosA = std::cos(rad);
+  float sinA = std::sin(rad);
+  return Vector2(
+      cosA * (point.x - origin.x) - sinA * (point.y - origin.y) + origin.x,
+      sinA * (point.x - origin.x) + cosA * (point.y - origin.y) + origin.y);
 }
 
 sf::Vector2f rotatePointAround(const sf::Vector2f &origin,
                                const sf::Vector2f &point, float angle) {
-  return sf::Vector2f(std::cos(dToR(angle)) * (point.x - origin.x) -
-                        std::sin(dToR(angle)) * (point.y - origin.y) + origin.x,
-                      std::sin(dToR(angle)) * (point.x - origin.x) +
-                        std::cos(dToR(angle)) * (point.y - origin.y) +
-                        origin.y);
+  Vector2 rotated =
+      rotate(Vector2(origin.x, origin.y), Vector2(point.x, point.y), angle);
+  return sf::Vector2f(rotated.x, rotated.y);
 }
 
-float getAngleWithOx(const Vector2 &velocity) {
-  return std::atan2(velocity.y, velocity.x);
-}
-
-sf::Vector2f convertToSFMLCoordinate(float x, float y) {
-  return sf::Vector2f(x, -y + Config::HEIGHT);
-}
-
-sf::Vector2f convertToSFMLCoordinate(Vector2 point) {
-  return sf::Vector2f(point.x, -point.y + Config::HEIGHT);
-}
-#endif
+} // namespace MathUtils

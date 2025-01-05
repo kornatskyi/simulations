@@ -10,7 +10,7 @@
 #include <vector>
 
 class Physics {
-  public:
+public:
   using EntityPtr = std::shared_ptr<Entity>;
   using EntityPair = std::tuple<EntityPtr, EntityPtr>;
   using Cell = std::tuple<int, int>;
@@ -52,13 +52,13 @@ class Physics {
     // a specific cell
     auto checkAndHandleCollisions = [&](const std::shared_ptr<Entity> &e1,
                                         const Vector2 &offset) {
-      auto cell =
-        getCell(Vector2(e1->position.x + offset.x, e1->position.y + offset.y));
+      auto cell = getCell(
+          Vector2(e1->position.x + offset.x, e1->position.y + offset.y));
       auto it = entitiesByCell.find(cell);
       if (it != entitiesByCell.end()) {
         for (auto e2 : it->second) {
           bool isCollisionAlreadyDetected =
-            collidingPairs.find(EntityPair{e2, e1}) != collidingPairs.end();
+              collidingPairs.find(EntityPair{e2, e1}) != collidingPairs.end();
           if (e1 != e2 && !isCollisionAlreadyDetected && areColliding(e1, e2)) {
             collidingPairs.insert(EntityPair{e1, e2});
           }
@@ -96,21 +96,21 @@ class Physics {
       }
       // Top-right
       if (fmod(cellSize - fmod(e1->position.x, cellSize), cellSize) <
-            e1->radius &&
+              e1->radius &&
           fmod(e1->position.y, cellSize) < e1->radius) {
         checkAndHandleCollisions(e1, Vector2(cellSize, -cellSize));
       }
       // Bottom-left
       if (fmod(e1->position.x, cellSize) < e1->radius &&
           fmod(cellSize - fmod(e1->position.y, cellSize), cellSize) <
-            e1->radius) {
+              e1->radius) {
         checkAndHandleCollisions(e1, Vector2(-cellSize, cellSize));
       }
       // Bottom-right
       if (fmod(cellSize - fmod(e1->position.x, cellSize), cellSize) <
-            e1->radius &&
+              e1->radius &&
           fmod(cellSize - fmod(e1->position.y, cellSize), cellSize) <
-            e1->radius) {
+              e1->radius) {
         checkAndHandleCollisions(e1, Vector2(cellSize, cellSize));
       }
     }
@@ -118,7 +118,7 @@ class Physics {
     return collidingPairs;
   }
 
-  private:
+private:
   EntityMap entitiesByCell;
   float cellSize;
 

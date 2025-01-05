@@ -16,16 +16,18 @@
 #include "EntityRenderer.h"
 
 class DrawableEntities : public sf::Drawable {
- private:
+private:
   const std::vector<std::shared_ptr<Entity>> &entities;
-  mutable std::vector<sf::VertexArray> m_shapes;  // Store individual shapes
+  mutable std::vector<sf::VertexArray>
+      shapesToRender; // Store individual shapes
   bool boundaryEnabled = Config::drawBoundary;
 
   void drawBoundaries(sf::RenderTarget &target, sf::RenderStates states) const {
-    if (!boundaryEnabled) return;
+    if (!boundaryEnabled)
+      return;
 
     for (const auto &entity : entities) {
-      sf::Vector2f position = convertToSFMLCoordinate(entity->position);
+      sf::Vector2f position = entity->position;
 
       // Draw boundary
       sf::CircleShape boundary(entity->radius);
@@ -45,26 +47,31 @@ class DrawableEntities : public sf::Drawable {
   }
 
   void updateShapes() const {
-    m_shapes.clear();
+    shapesToRender.clear();
     for (const auto &entity : entities) {
-      m_shapes.push_back(EntityRenderer::createShape(
+      shapesToRender.push_back(EntityRenderer::createShape(
           entity, EntityRenderer::determineColor(entity->getType())));
     }
   }
 
- public:
+public:
   explicit DrawableEntities(
       const std::vector<std::shared_ptr<Entity>> &entities)
       : entities(entities) {}
 
   void setBoundaryEnabled(bool enabled) { boundaryEnabled = enabled; }
 
- protected:
+protected:
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override {
+    // // Apply the origin shift to RenderStates
+    // sf::Transform transform;
+    // transform.translate(sf::Vector2f(0, Config::HEIGHT));
+    // states.transform *= transform;
+
     updateShapes();
 
-    for (const auto &shape : m_shapes) {
+    for (const auto &shape : shapesToRender) {
       target.draw(shape, states);
     }
 

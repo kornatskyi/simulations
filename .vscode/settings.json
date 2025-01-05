@@ -82,7 +82,9 @@
     "stop_token": "cpp",
     "thread": "cpp",
     "__nullptr": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "shared_mutex": "cpp",
+    "cfenv": "cpp"
   },
   "makefile.loggingLevel": "Debug"
 }

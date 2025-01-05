@@ -13,21 +13,22 @@
 #include <vector>
 
 class DrawablePhysics : public sf::Drawable {
-  public:
+public:
   std::shared_ptr<Physics> physics;
   DrawablePhysics(std::shared_ptr<Physics> physics) : physics(physics) {}
 
-  private:
-  protected:
+private:
+protected:
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override {
+
     auto cells = physics->getCells();
+
     for (auto &[i, j] : cells) {
       auto rect = sf::RectangleShape(
-        sf::Vector2f(physics->getCellSize(), physics->getCellSize()));
-      rect.setPosition(convertToSFMLCoordinate(i * physics->getCellSize(),
-                                               j * physics->getCellSize() +
-                                                 physics->getCellSize()));
+          sf::Vector2f(physics->getCellSize(), physics->getCellSize()));
+      rect.setPosition({i * physics->getCellSize(),
+                        j * physics->getCellSize() + physics->getCellSize()});
       rect.setOutlineColor(sf::Color::Red);
       rect.setFillColor(sf::Color::Transparent);
       rect.setOutlineThickness(1);
