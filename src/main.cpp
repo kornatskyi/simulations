@@ -1,8 +1,3 @@
-#include "../include/Config.h"
-#include "../include/Environement/Entity.h"
-#include "../include/Environement/Environment.h"
-#include "../include/Rendering/Rendering.h"
-#include "../include/Rendering/UI.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <iomanip>
@@ -10,15 +5,20 @@
 #include <sstream>
 #include <vector>
 
+#include "../include/Config.h"
+#include "../include/Environement/Entity.h"
+#include "../include/Environement/Environment.h"
+#include "../include/Rendering/Rendering.h"
+#include "../include/Rendering/UI.h"
+
 int main() {
-  sf::RenderWindow window(sf::VideoMode(Config::WIDTH, Config::HEIGHT),
+  sf::RenderWindow window(sf::VideoMode({Config::WIDTH, Config::HEIGHT}),
                           Config::TITLE, sf::Style::Titlebar);
-  window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
+  window.setVerticalSyncEnabled(true);  // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 
   // std::shared_ptr<Environment> environment = std::make_shared<Environment>();
-  std::shared_ptr<Environment> environment =
-    std::make_shared<Environment>(100);
+  std::shared_ptr<Environment> environment = std::make_shared<Environment>(100);
   DrawableEntities drawableElements(environment->entities);
   DrawablePhysics drawablePhysics(environment->physics);
   UI ui(environment);
@@ -36,10 +36,11 @@ int main() {
   while (window.isOpen()) {
     clock.restart();
     // handle events
-    sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
+    // handle events
+    while (const auto event = window.pollEvent()) {
+      if (event->is<sf::Event::Closed>()) {
         window.close();
+      }
     }
 
     environment->update(0.01);
@@ -54,12 +55,12 @@ int main() {
     if (fpsRenderPeriod > 1) {
       std::ostringstream oss;
       oss << std::fixed << std::setprecision(1) << currentFps;
-      fpsToDraw = oss.str(); // "60.1"
+      fpsToDraw = oss.str();  // "60.1"
 
       fpsRenderPeriod = 0;
     }
     window.draw(
-      ui.getText("FPS: " + fpsToDraw, sf::Vector2f(Config::WIDTH - 200, 10)));
+        ui.getText("FPS: " + fpsToDraw, sf::Vector2f(Config::WIDTH - 200, 10)));
     window.display();
     currentFps = 1.f / clock.getElapsedTime().asSeconds();
     fpsRenderPeriod += clock.getElapsedTime().asSeconds();

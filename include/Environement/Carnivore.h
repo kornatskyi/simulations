@@ -1,18 +1,19 @@
 #ifndef CARNIVORE_HEADER
 #define CARNIVORE_HEADER
-#include "../utils/math_utils.h"
-#include "../utils/utils.h"
-#include "Entity.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "../utils/math_utils.h"
+#include "../utils/utils.h"
+#include "Entity.h"
+
 class Carnivore : public Entity {
-  public:
-  using Entity::Entity; // Inherit constructors from Entity
+ public:
+  using Entity::Entity;  // Inherit constructors from Entity
 
   Carnivore(Vector2 position, float speed, float angle, float radius,
             float energy, Environment *env = nullptr)
-    : Entity(position, speed, angle, radius, energy, env = nullptr) {
+      : Entity(position, speed, angle, radius, energy, env = nullptr) {
     type = EntityType::CARNIVORE;
     lifetime = 10;
   }

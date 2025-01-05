@@ -1,6 +1,12 @@
 #ifndef ENVIRONMENT_HEADER
 #define ENVIRONMENT_HEADER
 
+#include <algorithm>
+#include <iostream>
+#include <memory>
+#include <random>
+#include <vector>
+
 #include "../EnvConfig.h"
 #include "../Physics/Physics.h"
 #include "../utils/math_utils.h"
@@ -9,13 +15,9 @@
 #include "Entity.h"
 #include "Herbivore.h"
 #include "Resource.h"
-#include <iostream>
-#include <memory>
-#include <random>
-#include <vector>
 
 class Environment {
-  public:
+ public:
   std::vector<std::shared_ptr<Entity>> entities;
   std::shared_ptr<Physics> physics = std::make_shared<Physics>();
 
@@ -50,8 +52,8 @@ class Environment {
 
         // Dead Carnivore entities going to be converted into Resourse
         if (entity->energy > 0 && entity->type == EntityType::CARNIVORE) {
-          newEntities.push_back(std::make_shared<Resource>(
-            Resource(entity->position, 0.f, 0.f, 20.f, entity->energy, this)));
+          newEntities.push_back(std::make_shared<Resource>(Resource(
+              entity->position, 0.f, 0.f, 20.f, entity->energy, this)));
         }
       }
       i++;
@@ -71,12 +73,12 @@ class Environment {
     }
   }
 
-  private:
+ private:
   void initializeDefaultEntities() {
     entities.emplace_back(
-      std::make_shared<Herbivore>(Vector2(10, 50), 200, 0, 10, 0));
+        std::make_shared<Herbivore>(Vector2(10, 50), 200, 0, 10, 0));
     entities.emplace_back(
-      std::make_shared<Resource>(Vector2(50, 50), 200, 45, 10, 0));
+        std::make_shared<Resource>(Vector2(50, 50), 200, 45, 10, 0));
     // entities.emplace_back(
     //   std::make_shared<Resource>(Vector2(500, 700), 200, 180, 20, 0));
     // entities.emplace_back(
@@ -99,21 +101,21 @@ class Environment {
       int angle = distAngle(gen);
       // Randomly choose the type of entity to create
       switch (i % 3) {
-      case 0:
-        entities.emplace_back(std::make_shared<Herbivore>(
-          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
-          EnvConfig::entityEnergy));
-        break;
-      case 1:
-        entities.emplace_back(std::make_shared<Carnivore>(
-          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
-          EnvConfig::entityEnergy));
-        break;
-      case 2:
-        entities.emplace_back(std::make_shared<Resource>(
-          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
-          EnvConfig::entityEnergy));
-        break;
+        case 0:
+          entities.emplace_back(std::make_shared<Herbivore>(
+              position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
+              EnvConfig::entityEnergy));
+          break;
+        case 1:
+          entities.emplace_back(std::make_shared<Carnivore>(
+              position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
+              EnvConfig::entityEnergy));
+          break;
+        case 2:
+          entities.emplace_back(std::make_shared<Resource>(
+              position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
+              EnvConfig::entityEnergy));
+          break;
       }
     }
   }

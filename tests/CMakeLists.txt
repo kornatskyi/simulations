@@ -5,7 +5,7 @@ enable_testing()
 add_executable(unit_tests unit/PhysicsTest.cpp)
 
 # Link against your project's library and Google Test
-target_link_libraries(unit_tests PRIVATE gtest_main sfml-graphics)
+target_link_libraries(unit_tests PRIVATE gtest_main SFML::Graphics SFML::Window SFML::System SFML::Audio)
 
 # Include your project's header files
 target_include_directories(unit_tests PRIVATE ../include)

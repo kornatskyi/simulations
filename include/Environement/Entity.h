@@ -1,12 +1,13 @@
 #ifndef ENTITY_HEADER
 #define ENTITY_HEADER
 
-#include "../utils/math_utils.h"
-#include "../utils/utils.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <memory>
 #include <tuple>
+
+#include "../utils/math_utils.h"
+#include "../utils/utils.h"
 
 // Forward declaration for Environment
 class Environment;
@@ -14,7 +15,7 @@ class Environment;
 enum class EntityType { ENTITY, CARNIVORE, HERBIVORE, RESOURCE };
 
 class Entity {
-  public:
+ public:
   Vector2 position;
   float speed;
   float angle;
@@ -27,22 +28,32 @@ class Entity {
 
   // Default constructor simplified
   Entity()
-    : position(0.f, 0.f), speed(0.1f), angle(0.f), radius(20.f), energy(0.f),
-      isAlive(true), env(nullptr) {
+      : position(0.f, 0.f),
+        speed(0.1f),
+        angle(0.f),
+        radius(20.f),
+        energy(0.f),
+        isAlive(true),
+        env(nullptr) {
     type = EntityType::ENTITY;
   }
 
   // Parameterized constructor with default parameters removed for clarity
   Entity(Vector2 position, float speed, float angle, float radius, float energy,
          Environment *env = nullptr)
-    : position(position), speed(speed), angle(angle), radius(radius),
-      energy(energy), isAlive(true), env(env) {
+      : position(position),
+        speed(speed),
+        angle(angle),
+        radius(radius),
+        energy(energy),
+        isAlive(true),
+        env(env) {
     type = EntityType::ENTITY;
   }
 
   virtual void moveForward(float elapsedTime) {
     auto [newAngle, newPos] =
-      adjustMovementForWalls(position, angle, Config::WIDTH, Config::HEIGHT);
+        adjustMovementForWalls(position, angle, Config::WIDTH, Config::HEIGHT);
     position = newPos;
     angle = newAngle;
     position.x += std::cos(dToR(angle)) * speed * elapsedTime;
@@ -77,9 +88,9 @@ class Entity {
                                          other.energy, other.isAlive);
   }
 
-  virtual ~Entity() = default; // Virtual destructor for base class
+  virtual ~Entity() = default;  // Virtual destructor for base class
 
-  private:
+ private:
   // Helper method to adjust entity movement if colliding with walls
   static std::tuple<float, Vector2> adjustMovementForWalls(Vector2 position,
                                                            float angle,

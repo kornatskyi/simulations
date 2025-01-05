@@ -1,6 +1,5 @@
 {
   "files.associations": {
-    "*.ejs": "html",
     "*.jsx": "javascriptreact",
     "*.js": "javascript",
     "*.rmd": "markdown",
@@ -14,6 +13,7 @@
     "*.wasm": "wasm",
     "*.asm": "asm-intel-x86-generic",
     ".env": "env",
+    "*.ejs": "html",
     "iostream": "cpp",
     "array": "cpp",
     "bitset": "cpp",
@@ -74,7 +74,14 @@
     "unordered_set": "cpp",
     "optional": "cpp",
     "ratio": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "codecvt": "cpp",
+    "condition_variable": "cpp",
+    "mutex": "cpp",
+    "semaphore": "cpp",
+    "stop_token": "cpp",
+    "thread": "cpp",
+    "__nullptr": "cpp"
   },
   "makefile.loggingLevel": "Debug"
 }
