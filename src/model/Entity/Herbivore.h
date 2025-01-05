@@ -9,15 +9,12 @@
 
 class Herbivore : public Entity {
 public:
-  using Entity::Entity; // Inherit constructors from Entity
-
   Herbivore(Vector2 position, float speed, float angle, float radius,
             float energy, Environment *env = nullptr);
-
-  virtual void die() override;
-  virtual EntityType getType() const override;
-  virtual void interact(std::shared_ptr<Entity> other) override;
-  virtual std::shared_ptr<Entity> reproduce() override;
+  void interact(std::shared_ptr<Entity> other) override;
+  std::shared_ptr<Entity> reproduce() override;
+  EntityType getType() const override;
+  void die() override;
 };
 
 #endif // HERBIVORE_HEADER

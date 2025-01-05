@@ -42,11 +42,11 @@ void DrawableEntities::drawBoundaries(sf::RenderTarget &target,
     return;
 
   for (const auto &entity : entities) {
-    sf::Vector2f position = entity->position;
+    sf::Vector2f position = entity->getPosition();
 
-    sf::CircleShape boundary(entity->radius);
+    sf::CircleShape boundary(entity->getRadius());
     boundary.setPosition(
-        {position.x - entity->radius, position.y - entity->radius});
+        {position.x - entity->getRadius(), position.y - entity->getRadius()});
     boundary.setFillColor(sf::Color::Transparent);
     boundary.setOutlineThickness(1);
     boundary.setOutlineColor(sf::Color::White);

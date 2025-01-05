@@ -38,7 +38,7 @@ void UI::draw(sf::RenderTarget &target, sf::RenderStates states) const {
       "Energy: " +
       std::to_string(std::accumulate(
           env->entities.begin(), env->entities.end(), 0.0f,
-          [](float sum, const auto &e) { return sum + e->energy; })));
+          [](float sum, const auto &e) { return sum + e->getEnergy(); })));
   totalEnergy->setPosition({10, 35});
 
   // Render text to screen

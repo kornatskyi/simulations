@@ -15,7 +15,7 @@ void Carnivore::die() { isAlive = false; }
 void Carnivore::interact(std::shared_ptr<Entity> other) {
   if (other->getType() == EntityType::HERBIVORE) {
     other->die();
-    energy += other->energy;
+    energy += other->getEnergy();
   }
 }
 

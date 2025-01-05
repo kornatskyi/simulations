@@ -33,22 +33,22 @@ sf::VertexArray
 EntityRenderer::createTriangleShape(const std::shared_ptr<Entity> &entity,
                                     const sf::Color &color) {
   sf::VertexArray vertices(sf::PrimitiveType::Triangles, 3);
-  sf::Vector2f position = entity->position;
+  sf::Vector2f position = entity->getPosition();
 
   std::array<sf::Vector2f, 3> points = {
       MathUtils::rotatePointAround(
           position,
-          sf::Vector2f(position.x - entity->radius / 2,
-                       position.y + entity->radius / 2),
-          entity->angle),
+          sf::Vector2f(position.x - entity->getRadius() / 2,
+                       position.y + entity->getRadius() / 2),
+          entity->getAngle()),
       MathUtils::rotatePointAround(
           position,
-          sf::Vector2f(position.x - entity->radius / 2,
-                       position.y - entity->radius / 2),
-          entity->angle),
+          sf::Vector2f(position.x - entity->getRadius() / 2,
+                       position.y - entity->getRadius() / 2),
+          entity->getAngle()),
       MathUtils::rotatePointAround(
-          position, sf::Vector2f(position.x + entity->radius, position.y),
-          entity->angle)};
+          position, sf::Vector2f(position.x + entity->getRadius(), position.y),
+          entity->getAngle())};
 
   for (int i = 0; i < 3; ++i) {
     vertices[i].position = points[i];
@@ -66,8 +66,8 @@ EntityRenderer::createRectangleShape(const std::shared_ptr<Resource> &entity,
 
   sf::Vertex topLeft, bottomLeft, topRight, bottomRight;
 
-  sf::Vector2f position = entity->position;
-  float size = entity->radius;
+  sf::Vector2f position = entity->getPosition();
+  float size = entity->getRadius();
 
   topLeft.position = position + sf::Vector2f(-size / 2, -size / 2);
   topRight.position = position + sf::Vector2f(size / 2, -size / 2);

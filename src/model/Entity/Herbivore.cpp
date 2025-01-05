@@ -17,7 +17,7 @@ EntityType Herbivore::getType() const { return EntityType::HERBIVORE; }
 void Herbivore::interact(std::shared_ptr<Entity> other) {
   if (other->getType() == EntityType::RESOURCE) {
     other->die();
-    energy += other->energy;
+    energy += other->getEnergy();
   }
 }
 
