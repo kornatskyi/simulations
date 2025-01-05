@@ -1,7 +1,5 @@
-#ifndef CARNIVORE_HEADER
-#define CARNIVORE_HEADER
+#pragma once
 
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <memory>
 
@@ -20,4 +18,3 @@ public:
 private:
   float lifetime;
 };
-#endif // CARNIVORE_HEADER
