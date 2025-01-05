@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Config.h>
 #include <SFML/Graphics.hpp>
 
 struct Vector2 {

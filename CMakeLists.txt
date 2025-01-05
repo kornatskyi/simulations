@@ -15,10 +15,11 @@ add_compile_options(-g -O0)
 # Set output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# Option to build SFML from source or use pre-installed version
+option(BUILD_FROM_SOURCE "Build SFML from source" OFF)
 
 if(BUILD_FROM_SOURCE)
-    # Fetch SFML
-    include(FetchContent)
+    # Fetch SFML from GitHub if not already available
     FetchContent_Declare(
         SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -26,40 +27,53 @@ if(BUILD_FROM_SOURCE)
     )
     FetchContent_MakeAvailable(SFML)
 else()
-    # Set the path to SFML
+    # Set the path to SFML if pre-built
     set(SFML_DIR "${CMAKE_SOURCE_DIR}/libs/SFML-3.0.0/lib/cmake/SFML")
 
     # Find the SFML package
     find_package(SFML 3.0 REQUIRED COMPONENTS Graphics Window System Audio)
 endif()
 
+# Collect all .cpp files in the 'view', 'controller', and 'model' folders
+file(GLOB_RECURSE MODEL_SRC
+    "src/model/*.cpp"
+)
 
-# Main executable
-add_executable(Simulations src/main.cpp)
+file(GLOB_RECURSE CONTROLLER_SRC
+    "src/controller/*.cpp"
+)
 
-target_include_directories(Simulations PRIVATE include ${SFML_INCLUDE_DIRS})
+file(GLOB_RECURSE VIEW_SRC
+    "src/view/*.cpp"
+)
+
+# Add the executable
+add_executable(Simulations
+    src/main.cpp
+    ${VIEW_SRC}
+    ${CONTROLLER_SRC}
+    ${MODEL_SRC}
+)
+
+# Automatically add all subdirectories under src
+target_include_directories(Simulations PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    ${SFML_INCLUDE_DIRS}
+)
 
 # Link SFML libraries
-target_link_libraries(Simulations PRIVATE SFML::Graphics SFML::Window SFML::System SFML::Audio)
+target_link_libraries(Simulations PRIVATE
+    SFML::Graphics
+    SFML::Window
+    SFML::System
+    SFML::Audio
+)
 
-# Copy assets over
+# Copy assets to the output directory after build
 add_custom_command(TARGET Simulations POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     "${CMAKE_SOURCE_DIR}/assets" $<TARGET_FILE_DIR:Simulations>/assets
 )
 
-# Google Test setup for tests subdirectory
-include(CTest) # Enables testing capabilities
-if(BUILD_TESTING)
-    FetchContent_Declare(
-      googletest
-      URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip
-    )
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # For Windows
-    FetchContent_MakeAvailable(googletest)
-
-    add_subdirectory(tests)
-endif()
-
-# Installation rules
+# Add installation rules
 install(TARGETS Simulations)

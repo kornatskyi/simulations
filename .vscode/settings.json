@@ -84,7 +84,14 @@
     "__nullptr": "cpp",
     "filesystem": "cpp",
     "shared_mutex": "cpp",
-    "cfenv": "cpp"
+    "cfenv": "cpp",
+    "__node_handle": "cpp",
+    "__functional_03": "cpp",
+    "target": "cpp",
+    "__bit_reference": "cpp",
+    "__hash_table": "cpp",
+    "__string": "cpp",
+    "__tree": "cpp"
   },
   "makefile.loggingLevel": "Debug"
 }

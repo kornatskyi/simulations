@@ -5,16 +5,17 @@
 #include <sstream>
 #include <vector>
 
-#include "../include/Config.h"
-#include "../include/Environement/Entity.h"
-#include "../include/Environement/Environment.h"
-#include "../include/Rendering/Rendering.h"
-#include "../include/Rendering/UI.h"
+#include "Config.h"
+#include "model/Entity/Entity.h"
+#include "model/Environment/Environment.h"
+#include "view/Rendering/DrawablePhysics.h"
+#include "view/Rendering/Rendering.h"
+#include "view/Rendering/UI.h"
 
 int main() {
   sf::RenderWindow window(sf::VideoMode({Config::WIDTH, Config::HEIGHT}),
                           Config::TITLE, sf::Style::Titlebar);
-  window.setVerticalSyncEnabled(true);  // sync with graphics card refresh rate
+  window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 
   // std::shared_ptr<Environment> environment = std::make_shared<Environment>();
@@ -55,7 +56,7 @@ int main() {
     if (fpsRenderPeriod > 1) {
       std::ostringstream oss;
       oss << std::fixed << std::setprecision(1) << currentFps;
-      fpsToDraw = oss.str();  // "60.1"
+      fpsToDraw = oss.str(); // "60.1"
 
       fpsRenderPeriod = 0;
     }
