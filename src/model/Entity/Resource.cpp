@@ -1,9 +1,7 @@
 #include "Resource.h"
 
 // Constructor
-Resource::Resource(Vector2 position, float speed, float angle, float radius,
-                   float energy, Environment *env)
-    : Entity(position, 0, angle, radius, energy, env) {
+Resource::Resource(Environment *env) : Entity(env) {
   type = EntityType::RESOURCE;
 }
 

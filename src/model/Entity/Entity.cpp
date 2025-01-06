@@ -2,10 +2,7 @@
 #include <utils/math_utils.h>
 
 // Default constructor
-Entity::Entity(Vector2 position, float speed, float angle, float radius,
-               float energy, Environment *env)
-    : position(position), speed(speed), angle(angle), radius(radius),
-      energy(energy), isAlive(true), env(env), type(EntityType::ENTITY) {
+Entity::Entity(Environment *env) : env(env), type(EntityType::ENTITY) {
   // Optional code here
 }
 
@@ -80,16 +77,34 @@ std::tuple<float, Vector2> Entity::adjustMovementForWalls(Vector2 position,
 Vector2 Entity::getPosition() const { return position; }
 
 // Update entity position
-void Entity::setPosition(const Vector2 &newPos) { position = newPos; }
+Entity &Entity::setPosition(const Vector2 &newPos) {
+  position = newPos;
+  return *this;
+}
 
 // Get entity energy
 float Entity::getEnergy() const { return energy; }
 
 // Update entity energy
-void Entity::setEnergy(float newEnergy) { energy = newEnergy; }
+Entity &Entity::setEnergy(float newEnergy) {
+  energy = newEnergy;
+  return *this;
+}
 
 float Entity::getRadius() const { return radius; };
-void Entity::setRadius(float newRadius) { radius = newRadius; };
+Entity &Entity::setRadius(float newRadius) {
+  radius = newRadius;
+  return *this;
+};
 
 float Entity::getAngle() const { return angle; };
-void Entity::setAngle(float newAngle) { angle = newAngle; };
+Entity &Entity::setAngle(float newAngle) {
+  angle = newAngle;
+  return *this;
+};
+
+float Entity::getSpeed() const { return speed; }
+Entity &Entity::setSpeed(float newSpeed) {
+  speed = newSpeed;
+  return *this;
+}

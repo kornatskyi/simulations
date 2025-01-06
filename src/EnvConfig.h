@@ -1,11 +1,23 @@
 #pragma once
 
-namespace EnvConfig {
+#include <string>
 
-inline float entityRadius = 20;
-inline float entitySpeed = 70;
-inline float entityEnergy = 10;
-inline float entityMaxLifetime = 10;
-inline float entityMaxEnergyCapacity = 10;
+class EnvConfig {
+public:
+  static EnvConfig &getInstance();
 
-} // namespace EnvConfig
+  float entityRadius;
+  float entitySpeed;
+  float entityEnergy;
+  float entityMaxLifetime;
+  float entityMaxEnergyCapacity;
+  float energyToSplit;
+  float spatialCellSize;
+  
+
+  void loadFromFile(const std::string &filename);
+  void loadDefaults();
+
+private:
+  EnvConfig();
+};

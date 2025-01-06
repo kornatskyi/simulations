@@ -18,7 +18,7 @@ public:
   using EntitiesSet = std::set<EntityPtr>;
   using EntityMap = std::map<Cell, EntitiesSet>;
 
-  explicit Physics(float cellSize = 50);
+  explicit Physics(float cellSize = EnvConfig::getInstance().spatialCellSize);
 
   std::vector<Cell> getCells();
   float getCellSize();

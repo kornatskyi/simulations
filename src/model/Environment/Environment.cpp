@@ -45,11 +45,12 @@ void Environment::update(float elapsedTime) {
       toDelete.push_back(i);
 
       // Convert dead Carnivores into Resources if they have energy
-      if (entity->getEnergy() > 0 &&
-          entity->getType() == EntityType::CARNIVORE) {
-        newEntities.push_back(std::make_shared<Resource>(
-            entity->getPosition(), 0.f, 0.f, 20.f, entity->getEnergy(), this));
-      }
+      // if (entity->getEnergy() > 0 &&
+      //     entity->getType() == EntityType::CARNIVORE) {
+      //   newEntities.push_back(std::make_shared<Resource>(
+      //       entity->getPosition(), 0.f, 0.f, 20.f, entity->getEnergy(),
+      //       this));
+      // }
     }
     i++;
   }
@@ -68,19 +69,9 @@ void Environment::update(float elapsedTime) {
 
 // Initialize entities by default
 void Environment::initializeDefaultEntities() {
-  // entities.emplace_back(
-  //     std::make_shared<Herbivore>(Vector2(10, 50), 200, 0, 10, 0));
-  // entities.emplace_back(
-  //     std::make_shared<Resource>(Vector2(50, 50), 200, 45, 10, 0));
-  // Additional entities can be uncommented as needed
-  entities.emplace_back(
-      std::make_shared<Herbivore>(Vector2(500, 700), 0, 180, 20, 0));
-  entities.emplace_back(
-      std::make_shared<Herbivore>(Vector2(400, 700), 0, 360, 20, 0));
-  entities.emplace_back(
-      std::make_shared<Herbivore>(Vector2(300, 700), 0, 360, 20, 0));
-  entities.emplace_back(
-      std::make_shared<Carnivore>(Vector2(200, 700), 100, 360, 20, 0));
+  auto newEntity = std::make_shared<Herbivore>(this);
+  newEntity->setPosition(Vector2(350, 500)).setSpeed(0);
+  entities.emplace_back(newEntity);
 }
 
 // Randomly generate entities in the environment
@@ -93,22 +84,22 @@ void Environment::generateRandomEntities(u_int n) {
   for (u_int i = 0; i < n; ++i) {
     Vector2 position(distX(gen), distY(gen));
     int angle = distAngle(gen);
-
+    std::shared_ptr<Entity> newEntity;
     switch (i % 3) {
     case 0:
-      entities.emplace_back(std::make_shared<Herbivore>(
-          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
-          EnvConfig::entityEnergy));
+      newEntity = std::make_shared<Herbivore>(this);
+      newEntity->setPosition(position).setAngle(angle);
+      entities.emplace_back(newEntity);
       break;
     case 1:
-      entities.emplace_back(std::make_shared<Carnivore>(
-          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
-          EnvConfig::entityEnergy));
+      newEntity = std::make_shared<Carnivore>(this);
+      newEntity->setPosition(position).setAngle(angle);
+      entities.emplace_back(newEntity);
       break;
     case 2:
-      entities.emplace_back(std::make_shared<Resource>(
-          position, EnvConfig::entitySpeed, angle, EnvConfig::entityRadius,
-          EnvConfig::entityEnergy));
+      newEntity = std::make_shared<Resource>(this);
+      newEntity->setPosition(position).setAngle(angle).setSpeed(0);
+      entities.emplace_back(newEntity);
       break;
     }
   }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <EnvConfig.h>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <memory>
@@ -14,8 +15,7 @@ enum class EntityType { ENTITY, CARNIVORE, HERBIVORE, RESOURCE };
 class Entity {
 public:
   Entity();
-  Entity(Vector2 position, float speed, float angle, float radius, float energy,
-         Environment *env = nullptr);
+  Entity(Environment *env = nullptr);
 
   virtual ~Entity();
 
@@ -26,16 +26,19 @@ public:
 
   bool alive() const;
   Vector2 getPosition() const;
-  void setPosition(const Vector2 &newPos);
+  Entity &setPosition(const Vector2 &newPos);
 
   float getEnergy() const;
-  void setEnergy(float newEnergy);
+  Entity &setEnergy(float newEnergy);
 
   float getRadius() const;
-  void setRadius(float newRadius);
+  Entity &setRadius(float newRadius);
 
   float getAngle() const;
-  void setAngle(float newAngle);
+  Entity &setAngle(float newAngle);
+
+  float getSpeed() const;
+  Entity &setSpeed(float newSpeed);
 
   bool operator<(const Entity &other) const;
   bool operator==(const Entity &other) const;
@@ -44,12 +47,12 @@ public:
   virtual std::shared_ptr<Entity> reproduce() = 0;
 
 protected:
-  Vector2 position;
-  float speed;
-  float angle;
-  float radius;
-  float energy;
-  bool isAlive;
+  Vector2 position = Vector2(0, 0);
+  float speed = EnvConfig::getInstance().entitySpeed;
+  float angle = 360;
+  float radius = EnvConfig::getInstance().entityRadius;
+  float energy = EnvConfig::getInstance().entityEnergy;
+  bool isAlive = true;
   Environment *env;
   EntityType type;
 

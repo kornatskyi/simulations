@@ -1,11 +1,8 @@
 #include "Carnivore.h"
 
 // Constructor
-Carnivore::Carnivore(Vector2 position, float speed, float angle, float radius,
-                     float energy, Environment *env)
-    : Entity(position, speed, angle, radius, energy, env) {
+Carnivore::Carnivore(Environment *env) : Entity(env) {
   type = EntityType::CARNIVORE;
-  lifetime = 10;
 }
 
 // Die method
@@ -33,11 +30,12 @@ EntityType Carnivore::getType() const { return EntityType::CARNIVORE; }
 
 // Reproduction logic
 std::shared_ptr<Entity> Carnivore::reproduce() {
-  const float energyToSplit = 10;
-  if (energy > energyToSplit) {
-    energy -= energyToSplit;
-    return std::make_shared<Carnivore>(position, speed, angle - 180, radius,
-                                       energyToSplit, env);
+  if (energy > EnvConfig::getInstance().energyToSplit) {
+    energy -= EnvConfig::getInstance().energyToSplit;
+
+    auto newEntity = std::make_shared<Carnivore>(env);
+    newEntity->setPosition(position);
+    return newEntity;
   }
   return nullptr;
 }

@@ -1,9 +1,7 @@
 #include "Herbivore.h"
 
 // Constructor
-Herbivore::Herbivore(Vector2 position, float speed, float angle, float radius,
-                     float energy, Environment *env)
-    : Entity(position, speed, angle, radius, energy, env) {
+Herbivore::Herbivore(Environment *env) : Entity(env) {
   type = EntityType::HERBIVORE;
 }
 
@@ -23,11 +21,11 @@ void Herbivore::interact(std::shared_ptr<Entity> other) {
 
 // Reproduction logic
 std::shared_ptr<Entity> Herbivore::reproduce() {
-  const float energyToSplit = 10;
-  if (energy > energyToSplit) {
-    energy -= energyToSplit;
-    return std::make_shared<Herbivore>(position, speed, angle + 180, radius,
-                                       energyToSplit, env);
+  if (energy > EnvConfig::getInstance().energyToSplit) {
+    energy -= EnvConfig::getInstance().energyToSplit;
+    auto newEntity = std::make_shared<Herbivore>(env);
+    newEntity->setPosition(position);
+    return newEntity;
   }
   return nullptr;
 }
