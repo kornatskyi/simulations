@@ -47,12 +47,17 @@ file(GLOB_RECURSE VIEW_SRC
     "src/view/*.cpp"
 )
 
+file(GLOB_RECURSE CONFIG_SRC
+    "src/*.cpp"
+)
+
 # Add the executable
 add_executable(Simulations
     src/main.cpp
     ${VIEW_SRC}
     ${CONTROLLER_SRC}
     ${MODEL_SRC}
+    ${CONFIG_SRC}
 )
 
 # Automatically add all subdirectories under src

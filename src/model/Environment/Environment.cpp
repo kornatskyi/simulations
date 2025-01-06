@@ -68,22 +68,26 @@ void Environment::update(float elapsedTime) {
 
 // Initialize entities by default
 void Environment::initializeDefaultEntities() {
-  entities.emplace_back(
-      std::make_shared<Herbivore>(Vector2(10, 50), 200, 0, 10, 0));
-  entities.emplace_back(
-      std::make_shared<Resource>(Vector2(50, 50), 200, 45, 10, 0));
+  // entities.emplace_back(
+  //     std::make_shared<Herbivore>(Vector2(10, 50), 200, 0, 10, 0));
+  // entities.emplace_back(
+  //     std::make_shared<Resource>(Vector2(50, 50), 200, 45, 10, 0));
   // Additional entities can be uncommented as needed
-  // entities.emplace_back(std::make_shared<Resource>(Vector2(500, 700), 200,
-  // 180, 20, 0));
-  // entities.emplace_back(std::make_shared<Carnivore>(Vector2(600, 700), 200,
-  // 360, 20, 0));
+  entities.emplace_back(
+      std::make_shared<Herbivore>(Vector2(500, 700), 0, 180, 20, 0));
+  entities.emplace_back(
+      std::make_shared<Herbivore>(Vector2(400, 700), 0, 360, 20, 0));
+  entities.emplace_back(
+      std::make_shared<Herbivore>(Vector2(300, 700), 0, 360, 20, 0));
+  entities.emplace_back(
+      std::make_shared<Carnivore>(Vector2(200, 700), 100, 360, 20, 0));
 }
 
 // Randomly generate entities in the environment
 void Environment::generateRandomEntities(u_int n) {
   std::mt19937 gen(42);
-  std::uniform_int_distribution<> distX(0, Config::WIDTH);
-  std::uniform_int_distribution<> distY(0, Config::HEIGHT);
+  std::uniform_int_distribution<> distX(0, Config::getInstance().width);
+  std::uniform_int_distribution<> distY(0, Config::getInstance().width);
   std::uniform_int_distribution<> distAngle(0, 360);
 
   for (u_int i = 0; i < n; ++i) {

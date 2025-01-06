@@ -35,27 +35,32 @@ public:
 };
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode({Config::WIDTH, Config::HEIGHT}),
-                          Config::TITLE, sf::Style::Titlebar);
+  sf::RenderWindow window(
+      sf::VideoMode({static_cast<unsigned int>(Config::getInstance().width),
+                     static_cast<unsigned int>(Config::getInstance().height)}),
+      Config::getInstance().title, sf::Style::Titlebar);
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
   window.setPosition(sf::Vector2i(100, 400));
 
   // std::shared_ptr<Environment> environment = std::make_shared<Environment>();
-  std::shared_ptr<Environment> environment = std::make_shared<Environment>(100);
+  std::shared_ptr<Environment> environment =
+      Config::getInstance().genRandomEntities
+          ? std::make_shared<Environment>(100)
+          : std::make_shared<Environment>();
   DrawableEntities drawableElements(environment->entities);
   DrawablePhysics drawablePhysics(environment->physics);
 
-  // sf::View view(sf::FloatRect(0, 0, Config::WIDTH, Config::HEIGHT));
-  // view.zoom(2);
-  // window.setView(view);
-  // run the main loop
+  // sf::View view(sf::FloatRect(0, 0, Config::getInstance().width,
+  // Config::getInstance().height)); view.zoom(2); window.setView(view); run the
+  // main loop
 
   // Utils
   FPSMeasurer fpsMeasurer;
   UI ui(environment);
 
-  auto fpsText = ui.getText("FPS: " + fpsMeasurer.fpsToDraw,
-                            sf::Vector2f(Config::WIDTH - 200, 10));
+  auto fpsText =
+      ui.getText("FPS: " + fpsMeasurer.fpsToDraw,
+                 sf::Vector2f(Config::getInstance().width - 200, 10));
 
   while (window.isOpen()) {
     fpsMeasurer.clock.restart();
@@ -67,12 +72,12 @@ int main() {
       }
     }
 
-    environment->update(0.1);
+    environment->update(0.01);
 
     // draw it
     window.clear();
     window.draw(drawableElements);
-    if (Config::drawPhysics) {
+    if (Config::getInstance().drawPhysics) {
       window.draw(drawablePhysics);
     }
     window.draw(ui);

@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "Debug Simulations",
-            "type": "cppdbg", // Use "cppvsdbg" for MSVC, or "cppdbg" for GCC/Clang
+            "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/bin/Simulations",
             "args": [],
@@ -12,7 +12,14 @@
             "environment": [],
             "preLaunchTask": "Build Simulations",
             "internalConsoleOptions": "neverOpen",
-            "miDebuggerPath": "/usr/bin/gdb"
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for GDB",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }

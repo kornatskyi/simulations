@@ -15,7 +15,8 @@ Entity::~Entity() = default;
 // Move the entity forward based on elapsed time
 void Entity::moveForward(float elapsedTime) {
   auto [newAngle, newPos] =
-      adjustMovementForWalls(position, angle, Config::WIDTH, Config::HEIGHT);
+      adjustMovementForWalls(position, angle, Config::getInstance().width,
+                             Config::getInstance().height);
   position = newPos;
   angle = newAngle;
   position.x += std::cos(MathUtils::dToR(angle)) * speed * elapsedTime;

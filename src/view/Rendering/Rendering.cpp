@@ -5,7 +5,7 @@
 // Constructor
 DrawableEntities::DrawableEntities(
     const std::vector<std::shared_ptr<Entity>> &entities)
-    : entities(entities), boundaryEnabled(Config::drawBoundary) {}
+    : entities(entities), boundaryEnabled(Config::getInstance().drawBoundary) {}
 
 // Enable or disable boundary rendering
 void DrawableEntities::setBoundaryEnabled(bool enabled) {

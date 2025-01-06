@@ -2,9 +2,9 @@
 #include <Config.h>
 
 // Constructor
-Physics::Physics(float cellSize) : cellSize(cellSize) {
-  for (unsigned int i = 0; i < Config::WIDTH / cellSize; ++i) {
-    for (unsigned int j = 0; j < Config::HEIGHT / cellSize; ++j) {
+Physics::Physics(float cellSize) : cellSize(cellSize), spatialGrid(cellSize) {
+  for (unsigned int i = 0; i < Config::getInstance().width / cellSize; ++i) {
+    for (unsigned int j = 0; j < Config::getInstance().height / cellSize; ++j) {
       entitiesByCell[Cell(i, j)] = EntitiesSet();
     }
   }
@@ -47,66 +47,90 @@ void Physics::update(const std::vector<EntityPtr> &entities) {
   }
 }
 
-// Get colliding entities based on spatial partitioning
 std::set<Physics::EntityPair>
 Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
-  update(entities);
+
+  spatialGrid.clear();
+  // Update entity positions and insert them into the grid
+  for (auto &entity : entities) {
+    spatialGrid.insert(entity);
+  }
 
   std::set<EntityPair> collidingPairs;
 
-  auto checkAndHandleCollisions = [&](const std::shared_ptr<Entity> &e1,
-                                      const Vector2 &offset) {
-    auto cell = getCell(Vector2(e1->getPosition().x + offset.x,
-                                e1->getPosition().y + offset.y));
-    auto it = entitiesByCell.find(cell);
-    if (it != entitiesByCell.end()) {
-      for (auto e2 : it->second) {
-        bool isCollisionAlreadyDetected =
-            collidingPairs.find(EntityPair{e2, e1}) != collidingPairs.end();
-        if (e1 != e2 && !isCollisionAlreadyDetected && areColliding(e1, e2)) {
-          collidingPairs.insert(EntityPair{e1, e2});
-        }
+  for (auto &entity : entities) {
+    auto potentiallyCollidingWith = spatialGrid.retrieve(entity);
+    for (auto ent : *potentiallyCollidingWith) {
+      if (spatialGrid.checkAABBCollision(entity, ent)) {
+        collidingPairs.insert(EntityPair{entity, ent});
       }
-    }
-  };
-
-  for (auto e1 : entities) {
-    checkAndHandleCollisions(e1, Vector2(0, 0));
-    if (fmod(e1->getPosition().x, cellSize) < e1->getRadius()) {
-      checkAndHandleCollisions(e1, Vector2(-cellSize, 0));
-    }
-    if (fmod(cellSize - fmod(e1->getPosition().x, cellSize), cellSize) <
-        e1->getRadius()) {
-      checkAndHandleCollisions(e1, Vector2(cellSize, 0));
-    }
-    if (fmod(e1->getPosition().y, cellSize) < e1->getRadius()) {
-      checkAndHandleCollisions(e1, Vector2(0, -cellSize));
-    }
-    if (fmod(cellSize - fmod(e1->getPosition().y, cellSize), cellSize) <
-        e1->getRadius()) {
-      checkAndHandleCollisions(e1, Vector2(0, cellSize));
-    }
-    if (fmod(e1->getPosition().x, cellSize) < e1->getRadius() &&
-        fmod(e1->getPosition().y, cellSize) < e1->getRadius()) {
-      checkAndHandleCollisions(e1, Vector2(-cellSize, -cellSize));
-    }
-    if (fmod(cellSize - fmod(e1->getPosition().x, cellSize), cellSize) <
-            e1->getRadius() &&
-        fmod(e1->getPosition().y, cellSize) < e1->getRadius()) {
-      checkAndHandleCollisions(e1, Vector2(cellSize, -cellSize));
-    }
-    if (fmod(e1->getPosition().x, cellSize) < e1->getRadius() &&
-        fmod(cellSize - fmod(e1->getPosition().y, cellSize), cellSize) <
-            e1->getRadius()) {
-      checkAndHandleCollisions(e1, Vector2(-cellSize, cellSize));
-    }
-    if (fmod(cellSize - fmod(e1->getPosition().x, cellSize), cellSize) <
-            e1->getRadius() &&
-        fmod(cellSize - fmod(e1->getPosition().y, cellSize), cellSize) <
-            e1->getRadius()) {
-      checkAndHandleCollisions(e1, Vector2(cellSize, cellSize));
     }
   }
 
   return collidingPairs;
 }
+
+// Get colliding entities based on spatial partitioning
+// std::set<Physics::EntityPair>
+// Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
+//   update(entities);
+
+//   std::set<EntityPair> collidingPairs;
+
+//   auto checkAndHandleCollisions = [&](const std::shared_ptr<Entity> &e1,
+//                                       const Vector2 &offset) {
+//     auto cell = getCell(Vector2(e1->getPosition().x + offset.x,
+//                                 e1->getPosition().y + offset.y));
+//     auto it = entitiesByCell.find(cell);
+//     if (it != entitiesByCell.end()) {
+//       for (auto e2 : it->second) {
+//         bool isCollisionAlreadyDetected =
+//             collidingPairs.find(EntityPair{e2, e1}) != collidingPairs.end();
+//         if (e1 != e2 && !isCollisionAlreadyDetected && areColliding(e1, e2))
+//         {
+//           collidingPairs.insert(EntityPair{e1, e2});
+//         }
+//       }
+//     }
+//   };
+
+//   for (auto e1 : entities) {
+//     checkAndHandleCollisions(e1, Vector2(0, 0));
+//     if (fmod(e1->getPosition().x, cellSize) < e1->getRadius()) {
+//       checkAndHandleCollisions(e1, Vector2(-cellSize, 0));
+//     }
+//     if (fmod(cellSize - fmod(e1->getPosition().x, cellSize), cellSize) <
+//         e1->getRadius()) {
+//       checkAndHandleCollisions(e1, Vector2(cellSize, 0));
+//     }
+//     if (fmod(e1->getPosition().y, cellSize) < e1->getRadius()) {
+//       checkAndHandleCollisions(e1, Vector2(0, -cellSize));
+//     }
+//     if (fmod(cellSize - fmod(e1->getPosition().y, cellSize), cellSize) <
+//         e1->getRadius()) {
+//       checkAndHandleCollisions(e1, Vector2(0, cellSize));
+//     }
+//     if (fmod(e1->getPosition().x, cellSize) < e1->getRadius() &&
+//         fmod(e1->getPosition().y, cellSize) < e1->getRadius()) {
+//       checkAndHandleCollisions(e1, Vector2(-cellSize, -cellSize));
+//     }
+//     if (fmod(cellSize - fmod(e1->getPosition().x, cellSize), cellSize) <
+//             e1->getRadius() &&
+//         fmod(e1->getPosition().y, cellSize) < e1->getRadius()) {
+//       checkAndHandleCollisions(e1, Vector2(cellSize, -cellSize));
+//     }
+//     if (fmod(e1->getPosition().x, cellSize) < e1->getRadius() &&
+//         fmod(cellSize - fmod(e1->getPosition().y, cellSize), cellSize) <
+//             e1->getRadius()) {
+//       checkAndHandleCollisions(e1, Vector2(-cellSize, cellSize));
+//     }
+//     if (fmod(cellSize - fmod(e1->getPosition().x, cellSize), cellSize) <
+//             e1->getRadius() &&
+//         fmod(cellSize - fmod(e1->getPosition().y, cellSize), cellSize) <
+//             e1->getRadius()) {
+//       checkAndHandleCollisions(e1, Vector2(cellSize, cellSize));
+//     }
+//   }
+
+//   return collidingPairs;
+// }

@@ -1,15 +1,21 @@
-// Config.h
 #pragma once
+#include <string>
 
-namespace Config {
-// General
-constexpr int WIDTH = 1600;
-constexpr int HEIGHT = 900;
-constexpr char TITLE[] = "Predator/pray simulation.";
+class Config {
+public:
+    static Config& getInstance();
+    
+    int width;
+    int height;
+    std::string title;
+    int defaultSeed;
+    bool drawBoundary;
+    bool drawPhysics;
+    bool genRandomEntities;
 
-// Seeds
-constexpr int defaultSeed = 42;
+    void loadFromFile(const std::string& filename);
+    void loadDefaults();
 
-inline bool drawBoundary = true;
-inline bool drawPhysics = false;
-} // namespace Config
+private:
+    Config();
+};

@@ -17,6 +17,6 @@ struct Vector2 {
 };
 
 inline bool isCollidingWithWall(const Vector2 &point) {
-  return point.x < 0 || point.y < 0 || point.x > Config::WIDTH ||
-         point.y > Config::HEIGHT;
+  return point.x < 0 || point.y < 0 || point.x > Config::getInstance().width ||
+         point.y > Config::getInstance().height;
 }

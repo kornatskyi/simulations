@@ -3,11 +3,12 @@
 #include <cmath>
 #include <map>
 #include <memory>
+#include <model/Entity/Entity.h>
+#include <model/Physics/SpatialHashGrid.h>
 #include <set>
 #include <tuple>
-#include <vector>
-#include <model/Entity/Entity.h>
 #include <utils/utils.h>
+#include <vector>
 
 class Physics {
 public:
@@ -29,6 +30,7 @@ public:
 private:
   EntityMap entitiesByCell;
   float cellSize;
+  SpatialHashGrid spatialGrid;
 
   bool areColliding(const EntityPtr &e1, const EntityPtr &e2) const;
   void update(const std::vector<EntityPtr> &entities);
