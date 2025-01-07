@@ -16,7 +16,7 @@ void Config::loadDefaults() {
   defaultSeed = 42;
   drawBoundary = true;
   drawPhysics = false;
-  genRandomEntities = true;
+  genRandomEntities = false;
 }
 
 void Config::loadFromFile(const std::string &filename) {

@@ -11,7 +11,7 @@ Physics::Physics(float cellSize) : cellSize(cellSize), spatialGrid(cellSize) {
 }
 
 // Get all cells
-std::vector<Physics::Cell> Physics::getCells() {
+std::vector<Cell> Physics::getCells() {
   std::vector<Cell> cells;
   for (auto [cell, _] : entitiesByCell) {
     cells.push_back(cell);
@@ -23,7 +23,7 @@ std::vector<Physics::Cell> Physics::getCells() {
 float Physics::getCellSize() { return cellSize; }
 
 // Get the cell corresponding to a specific position
-Physics::Cell Physics::getCell(Vector2 p) {
+Cell Physics::getCell(Vector2 p) {
   return Cell(p.x / cellSize, p.y / cellSize);
 }
 
@@ -47,21 +47,23 @@ void Physics::update(const std::vector<EntityPtr> &entities) {
   }
 }
 
-std::set<Physics::EntityPair>
+std::unordered_set<EntityPair>
 Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
 
   spatialGrid.clear();
   // Update entity positions and insert them into the grid
   for (auto &entity : entities) {
-    spatialGrid.insert(entity);
+    spatialGrid.addEntity(entity);
   }
 
-  std::set<EntityPair> collidingPairs;
+  std::unordered_set<EntityPair> collidingPairs;
 
   for (auto &entity : entities) {
-    auto potentiallyCollidingWith = spatialGrid.retrieve(entity);
+
+    auto potentiallyCollidingWith = spatialGrid.getPotentialCollisions(entity);
+
     for (auto ent : *potentiallyCollidingWith) {
-      if (spatialGrid.checkAABBCollision(entity, ent)) {
+      if (spatialGrid.areColliding(entity, ent)) {
         collidingPairs.insert(EntityPair{entity, ent});
       }
     }
@@ -70,7 +72,7 @@ Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
   return collidingPairs;
 }
 
-// Get colliding entities based on spatial partitioning
+// // Get colliding entities based on spatial partitioning
 // std::set<Physics::EntityPair>
 // Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
 //   update(entities);

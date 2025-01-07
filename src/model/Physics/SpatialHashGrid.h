@@ -12,12 +12,12 @@ public:
 
   void clear();
 
-  bool checkAABBCollision(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
+  bool areColliding(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
 
   // Retrieves all potential collisions
   std::shared_ptr<std::vector<std::shared_ptr<Entity>>>
-  retrieve(std::shared_ptr<Entity> entity);
-  void insert(std::shared_ptr<Entity> entity);
+  getPotentialCollisions(std::shared_ptr<Entity> entity);
+  void addEntity(std::shared_ptr<Entity> entity);
 
 private:
   float cellSize;

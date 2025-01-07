@@ -1,8 +1,8 @@
 #include "Entity.h"
 #include <utils/math_utils.h>
 
-// Default constructor
-Entity::Entity(Environment *env) : env(env), type(EntityType::ENTITY) {
+Entity::Entity(Environment *env)
+    : env(env), type(EntityType::ENTITY), id_(generateId()) {
   // Optional code here
 }
 

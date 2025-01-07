@@ -1,3 +1,5 @@
+#include "Physics.h"
+#include <algorithm>
 #include <cmath>
 #include <model/Physics/SpatialHashGrid.h>
 #include <set>
@@ -6,8 +8,7 @@ SpatialHashGrid::SpatialHashGrid(float cellSize) : cellSize(cellSize) {}
 
 void SpatialHashGrid::clear() { grid.clear(); }
 
-bool SpatialHashGrid::checkAABBCollision(std::shared_ptr<Entity> a,
-                                         std::shared_ptr<Entity> b) {
+bool SpatialHashGrid::areColliding(EntityPtr a, EntityPtr b) {
   float dx = a->getPosition().x - b->getPosition().x;
   float dy = a->getPosition().y - b->getPosition().y;
   float distanceSquared = dx * dx + dy * dy;
@@ -17,13 +18,14 @@ bool SpatialHashGrid::checkAABBCollision(std::shared_ptr<Entity> a,
 }
 
 // Retrieves all potential collisions
-std::shared_ptr<std::vector<std::shared_ptr<Entity>>>
-SpatialHashGrid::retrieve(std::shared_ptr<Entity> entity) {
-  std::set<std::shared_ptr<Entity>> entities;
+std::shared_ptr<std::vector<EntityPtr>>
+SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
+  std::set<EntityPtr> entities;
 
   auto cellIndices = getCellIndices(entity);
 
   for (auto index : cellIndices) {
+
     if (grid.find(index) != grid.end()) {
       auto cellEntities = grid.at(index);
 
@@ -34,21 +36,22 @@ SpatialHashGrid::retrieve(std::shared_ptr<Entity> entity) {
       }
     }
   }
-  return std::make_shared<std::vector<std::shared_ptr<Entity>>>(
-      entities.begin(), entities.end());
+  return std::make_shared<std::vector<EntityPtr>>(entities.begin(),
+                                                  entities.end());
 }
 
 std::string SpatialHashGrid::getCellKey(int x, int y) {
   return std::to_string(x) + "," + std::to_string(y);
 }
 
-void SpatialHashGrid::insert(std::shared_ptr<Entity> entity) {
+void SpatialHashGrid::addEntity(EntityPtr entity) {
   auto cellIndices = getCellIndices(entity);
 
   for (auto index : cellIndices) {
+
     if (grid.find(index) == grid.end()) {
-      std::shared_ptr<std::vector<std::shared_ptr<Entity>>> newVec =
-          std::make_shared<std::vector<std::shared_ptr<Entity>>>();
+      std::shared_ptr<std::vector<EntityPtr>> newVec =
+          std::make_shared<std::vector<EntityPtr>>();
 
       grid.emplace(index, newVec);
     }
@@ -56,32 +59,35 @@ void SpatialHashGrid::insert(std::shared_ptr<Entity> entity) {
   }
 }
 
-std::vector<std::string>
-SpatialHashGrid::getCellIndices(std::shared_ptr<Entity> entity) {
+std::vector<std::string> SpatialHashGrid::getCellIndices(EntityPtr entity) {
   std::set<std::string> indices;
 
-  // Probably what you want:
-  int minX =
-      std::floor((entity->getPosition().x - entity->getRadius()) / cellSize);
-  int minY =
-      std::floor((entity->getPosition().y - entity->getRadius()) / cellSize);
-  int maxX =
-      std::floor((entity->getPosition().x + entity->getRadius()) / cellSize);
-  int maxY =
-      std::floor((entity->getPosition().y + entity->getRadius()) / cellSize);
+  const float cellSize = EnvConfig::getInstance().spatialCellSize;
+  const auto &pos = entity->getPosition();
+  const float radius = entity->getRadius();
 
-  for (int x = minX; x < maxX; x++) {
-    for (int y = minY; y < maxY; y++) {
-      indices.insert(getCellKey(x, y));
+  // 1. Circle's bounding box
+  const float left = pos.x - radius;
+  const float right = pos.x + radius;
+  const float bottom = pos.y - radius;
+  const float top = pos.y + radius;
+
+  // 2. Convert to cell indices
+  int minCellX = static_cast<int>(std::floor(left / cellSize));
+  int maxCellX = static_cast<int>(std::floor(right / cellSize));
+  int minCellY = static_cast<int>(std::floor(bottom / cellSize));
+  int maxCellY = static_cast<int>(std::floor(top / cellSize));
+
+  // 3. Insert all touched cells
+  for (int x = minCellX; x <= maxCellX; ++x) {
+    for (int y = minCellY; y <= maxCellY; ++y) {
+      // care only about inbound cells
+      if (x > 0 && y > 0 && x < Config::getInstance().width &&
+          y < Config::getInstance().height) {
+        indices.insert(getCellKey(x, y));
+      }
     }
   }
 
-  return std::vector(indices.begin(), indices.end());
-}
-
-void printSet(const std::set<std::string> &s) {
-  for (const auto &el : s) {
-    std::cout << el << " ";
-  }
-  std::cout << std::endl;
+  return std::vector<std::string>(indices.begin(), indices.end());
 }

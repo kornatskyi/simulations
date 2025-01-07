@@ -72,6 +72,17 @@ void Environment::initializeDefaultEntities() {
   auto newEntity = std::make_shared<Herbivore>(this);
   newEntity->setPosition(Vector2(350, 500)).setSpeed(0);
   entities.emplace_back(newEntity);
+
+  std::mt19937 gen(42);
+  std::uniform_int_distribution<> dist(-10, 10);
+  std::uniform_int_distribution<> distAngle(0, 360);
+
+  for (u_int i = 0; i < 100; ++i) {
+    auto newEntity = std::make_shared<Herbivore>(this);
+    newEntity->setPosition(Vector2(350 + dist(gen), 500 + dist(gen)))
+        .setSpeed(0);
+    entities.emplace_back(newEntity);
+  }
 }
 
 // Randomly generate entities in the environment
