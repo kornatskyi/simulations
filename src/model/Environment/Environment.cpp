@@ -45,12 +45,13 @@ void Environment::update(float elapsedTime) {
       toDelete.push_back(i);
 
       // Convert dead Carnivores into Resources if they have energy
-      // if (entity->getEnergy() > 0 &&
-      //     entity->getType() == EntityType::CARNIVORE) {
-      //   newEntities.push_back(std::make_shared<Resource>(
-      //       entity->getPosition(), 0.f, 0.f, 20.f, entity->getEnergy(),
-      //       this));
-      // }
+      if (entity->getEnergy() > 0 &&
+          entity->getType() == EntityType::CARNIVORE) {
+        auto newResourse = std::make_shared<Resource>(this);
+        newResourse->setPosition(entity->getPosition())
+            .setEnergy(entity->getEnergy());
+        newEntities.push_back(newResourse);
+      }
     }
     i++;
   }
