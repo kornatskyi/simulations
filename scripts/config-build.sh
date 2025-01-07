@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cmake -S . -B build
+cmake -DENABLE_PROFILING=ON -S . -B build

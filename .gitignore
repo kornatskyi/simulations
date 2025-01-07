@@ -4,3 +4,7 @@ out
 .idea
 .vs
 libs
+gmon.out
+profile.png
+profile.txt
+.venv

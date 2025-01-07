@@ -12,6 +12,17 @@ set(CMAKE_BUILD_TYPE Debug)
 add_compile_options(-Wall -Wextra -Wpedantic -Werror -Wno-unused-variable -Wno-unused-parameter)
 add_compile_options(-g -O0)
 
+# Enable profiling option
+option(ENABLE_PROFILING "Enable profiling with gprof" OFF)
+
+if(ENABLE_PROFILING)
+    message(STATUS "Profiling enabled: Adding -pg flag for gprof")
+    add_compile_options(-pg)
+    add_link_options(-pg)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+endif()
+
+
 # Set output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
