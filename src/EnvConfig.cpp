@@ -10,7 +10,7 @@ EnvConfig &EnvConfig::getInstance() {
 EnvConfig::EnvConfig() { loadDefaults(); }
 
 void EnvConfig::loadDefaults() {
-  entityRadius = 5;
+  entityRadius = 30;
   entitySpeed = 70;
   entityEnergy = 10;
   entityMaxLifetime = 100;
