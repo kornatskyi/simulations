@@ -11,10 +11,20 @@ Physics::Physics(float cellSize) : cellSize(cellSize), spatialGrid(cellSize) {
 }
 
 // Get all cells
-std::vector<Cell> Physics::getCells() {
+std::vector<Cell> Physics::getAllCells() {
   std::vector<Cell> cells;
   for (auto [cell, _] : entitiesByCell) {
     cells.push_back(cell);
+  }
+  return cells;
+}
+std::vector<Cell> Physics::getCellsFromSpatialHash() {
+  std::vector<Cell> cells;
+
+  auto grid = spatialGrid.getGrid();
+  for (auto &pair : grid) {
+    auto index = spatialGrid.getCellIndex(pair.first);
+    cells.push_back(index);
   }
   return cells;
 }

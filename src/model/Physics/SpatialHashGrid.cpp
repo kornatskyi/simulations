@@ -6,6 +6,26 @@
 
 SpatialHashGrid::SpatialHashGrid(float cellSize) : cellSize(cellSize) {}
 
+std::map<std::string, std::shared_ptr<std::vector<EntityPtr>>>
+SpatialHashGrid::getGrid() {
+  return grid;
+}
+
+std::tuple<int, int> SpatialHashGrid::getCellIndex(std::string cellKey) {
+  std::istringstream stream(cellKey);
+  std::string xStr, yStr;
+
+  // Split the string by comma
+  std::getline(stream, xStr, ',');
+  std::getline(stream, yStr, ',');
+
+  // Convert to integers and return as tuple
+  int x = std::stoi(xStr);
+  int y = std::stoi(yStr);
+
+  return std::make_tuple(x, y);
+}
+
 void SpatialHashGrid::clear() { grid.clear(); }
 
 bool SpatialHashGrid::areColliding(EntityPtr a, EntityPtr b) {
@@ -81,11 +101,7 @@ std::vector<std::string> SpatialHashGrid::getCellIndices(EntityPtr entity) {
   // 3. Insert all touched cells
   for (int x = minCellX; x <= maxCellX; ++x) {
     for (int y = minCellY; y <= maxCellY; ++y) {
-      // care only about inbound cells
-      if (x > 0 && y > 0 && x < Config::getInstance().width &&
-          y < Config::getInstance().height) {
-        indices.insert(getCellKey(x, y));
-      }
+      indices.insert(getCellKey(x, y - 1));
     }
   }
 

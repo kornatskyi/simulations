@@ -7,7 +7,8 @@ DrawablePhysics::DrawablePhysics(std::shared_ptr<Physics> physics)
 // Draw method to visualize the physics grid
 void DrawablePhysics::draw(sf::RenderTarget &target,
                            sf::RenderStates states) const {
-  auto cells = physics->getCells();
+
+  auto cells = physics->getCellsFromSpatialHash();
 
   for (auto &[i, j] : cells) {
     sf::RectangleShape rect(

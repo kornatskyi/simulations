@@ -15,8 +15,8 @@ void Config::loadDefaults() {
   title = "Predator/prey simulation.";
   defaultSeed = 42;
   drawBoundary = true;
-  drawPhysics = false;
-  genRandomEntities = false;
+  drawPhysics = true;
+  genRandomEntities = true;
 }
 
 void Config::loadFromFile(const std::string &filename) {

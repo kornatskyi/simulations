@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Aliases.h>
 #include <map>
 #include <memory>
 #include <model/Entity/Entity.h>
@@ -12,18 +13,20 @@ public:
 
   void clear();
 
-  bool areColliding(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
+  bool areColliding(EntityPtr a, EntityPtr b);
 
   // Retrieves all potential collisions
-  std::shared_ptr<std::vector<std::shared_ptr<Entity>>>
-  getPotentialCollisions(std::shared_ptr<Entity> entity);
-  void addEntity(std::shared_ptr<Entity> entity);
+  std::shared_ptr<std::vector<EntityPtr>>
+  getPotentialCollisions(EntityPtr entity);
+  void addEntity(EntityPtr entity);
+
+  std::map<std::string, std::shared_ptr<std::vector<EntityPtr>>> getGrid();
+  std::tuple<int, int> getCellIndex(std::string cellKey);
 
 private:
   float cellSize;
-  std::map<std::string, std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>
-      grid;
+  std::map<std::string, std::shared_ptr<std::vector<EntityPtr>>> grid;
 
   std::string getCellKey(int x, int y);
-  std::vector<std::string> getCellIndices(std::shared_ptr<Entity> entity);
+  std::vector<std::string> getCellIndices(EntityPtr entity);
 };

@@ -40,7 +40,7 @@ int main() {
                      static_cast<unsigned int>(Config::getInstance().height)}),
       Config::getInstance().title, sf::Style::Titlebar);
   window.setVerticalSyncEnabled(true); // sync with graphics card refresh rate
-  window.setPosition(sf::Vector2i(100, 400));
+  window.setPosition(sf::Vector2i(100, 200));
 
   // std::shared_ptr<Environment> environment = std::make_shared<Environment>();
   std::shared_ptr<Environment> environment =
