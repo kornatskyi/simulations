@@ -3,6 +3,7 @@
 // Constructor
 Resource::Resource(Environment *env) : Entity(env) {
   type = EntityType::RESOURCE;
+  speed = 0;
 }
 
 // Die method
