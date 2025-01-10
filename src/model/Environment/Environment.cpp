@@ -19,27 +19,34 @@ Environment::Environment(u_int n) : physics(std::make_shared<Physics>()) {
 
 // Update function to handle entity movement, interaction, and reproduction
 void Environment::update(float elapsedTime) {
-  for (auto &entity : entities) {
-    entity->moveForward(elapsedTime);
-  }
 
-  auto collidingPairs = physics->getCollidingEntities(entities);
-  for (const auto &[first, second] : collidingPairs) {
-    first->interact(second);
-    second->interact(first);
-  }
+  physics->update(entities);
 
   std::vector<long unsigned int> toDelete;
   std::vector<std::shared_ptr<Entity>> newEntities;
   long unsigned int i{0};
 
+  std::unordered_set<EntityPair> interacted;
+
   for (auto &entity : entities) {
+    entity->moveForward(elapsedTime);
+    auto collidingWith = physics->getPotentiallyColliding(entity);
+
+    for (auto otherEntity : *collidingWith) {
+      if (interacted.find(EntityPair(entity, otherEntity)) !=
+          interacted.end()) {
+        continue;
+      }
+      entity->interact(otherEntity);
+      otherEntity->interact(entity);
+      interacted.emplace(EntityPair(entity, otherEntity));
+    }
+
     // Reproduction logic
     auto newEntity = entity->reproduce();
     if (newEntity != nullptr) {
       newEntities.push_back(newEntity);
     }
-
     // Collect dead entities
     if (!entity->alive()) {
       toDelete.push_back(i);
@@ -78,10 +85,11 @@ void Environment::initializeDefaultEntities() {
   std::uniform_int_distribution<> dist(-10, 10);
   std::uniform_int_distribution<> distAngle(0, 360);
 
-  for (u_int i = 0; i < 2; ++i) {
+  for (u_int i = 0; i < 50; ++i) {
     auto newEntity = std::make_shared<Herbivore>(this);
     newEntity->setPosition(Vector2(350 + dist(gen), 500 + dist(gen)))
-        .setSpeed(0);
+        .setSpeed(10)
+        .setAngle(60);
     entities.emplace_back(newEntity);
   }
 }

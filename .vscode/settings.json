@@ -94,7 +94,27 @@
     "__tree": "cpp",
     "locale": "cpp",
     "__split_buffer": "cpp",
-    "ios": "cpp"
+    "ios": "cpp",
+    "typeindex": "cpp",
+    "barrier": "cpp",
+    "charconv": "cpp",
+    "complex": "cpp",
+    "coroutine": "cpp",
+    "csetjmp": "cpp",
+    "csignal": "cpp",
+    "cuchar": "cpp",
+    "regex": "cpp",
+    "source_location": "cpp",
+    "future": "cpp",
+    "latch": "cpp",
+    "ranges": "cpp",
+    "scoped_allocator": "cpp",
+    "span": "cpp",
+    "syncstream": "cpp",
+    "valarray": "cpp",
+    "__locale": "cpp",
+    "__threading_support": "cpp",
+    "__functional_base": "cpp"
   },
   "makefile.loggingLevel": "Debug"
 }

@@ -47,8 +47,6 @@ public:
    * @return std::vector<Cell> A vector containing all cells that currently have
    * entities.
    */
-  std::vector<Cell> getAllCells();
-
   std::vector<Cell> getCellsFromSpatialHash();
 
   /**
@@ -88,6 +86,20 @@ public:
   std::unordered_set<EntityPair>
   getCollidingEntities(const std::vector<EntityPtr> &entities);
 
+  std::shared_ptr<std::vector<EntityPtr>>
+  getPotentiallyColliding(const EntityPtr &entity);
+
+  /**
+   * @brief Updates the spatial grid with the current positions of entities.
+   *
+   * Processes the provided entities, updating their positions in the spatial
+   * grid to reflect any movements or changes since the last update.
+   *
+   * @param entities A vector of EntityPtr objects to update in the spatial
+   * grid.
+   */
+  void update(const std::vector<EntityPtr> &entities);
+
 private:
   /**
    * @brief Maps cells to the set of entities contained within them.
@@ -123,15 +135,4 @@ private:
    * @return false Otherwise.
    */
   bool areColliding(const EntityPtr &e1, const EntityPtr &e2) const;
-
-  /**
-   * @brief Updates the spatial grid with the current positions of entities.
-   *
-   * Processes the provided entities, updating their positions in the spatial
-   * grid to reflect any movements or changes since the last update.
-   *
-   * @param entities A vector of EntityPtr objects to update in the spatial
-   * grid.
-   */
-  void update(const std::vector<EntityPtr> &entities);
 };

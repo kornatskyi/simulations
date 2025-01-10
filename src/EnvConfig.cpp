@@ -10,14 +10,14 @@ EnvConfig &EnvConfig::getInstance() {
 EnvConfig::EnvConfig() { loadDefaults(); }
 
 void EnvConfig::loadDefaults() {
-  entityRadius = 30;
+  entityRadius = 20;
   entitySpeed = 70;
   entityEnergy = 10;
-  entityMaxLifetime = 100;
+  entityMaxLifetime = 60;
   entityMaxEnergyCapacity = 10;
   energyToSplit = 10;
 
-  spatialCellSize = 30;
+  spatialCellSize = 0.5 * entityRadius;
 }
 
 void EnvConfig::loadFromFile(const std::string &filename) {

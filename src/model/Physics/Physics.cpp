@@ -2,22 +2,8 @@
 #include <Config.h>
 
 // Constructor
-Physics::Physics(float cellSize) : cellSize(cellSize), spatialGrid(cellSize) {
-  for (unsigned int i = 0; i < Config::getInstance().width / cellSize; ++i) {
-    for (unsigned int j = 0; j < Config::getInstance().height / cellSize; ++j) {
-      entitiesByCell[Cell(i, j)] = EntitiesSet();
-    }
-  }
-}
+Physics::Physics(float cellSize) : cellSize(cellSize), spatialGrid(cellSize) {}
 
-// Get all cells
-std::vector<Cell> Physics::getAllCells() {
-  std::vector<Cell> cells;
-  for (auto [cell, _] : entitiesByCell) {
-    cells.push_back(cell);
-  }
-  return cells;
-}
 std::vector<Cell> Physics::getCellsFromSpatialHash() {
   std::vector<Cell> cells;
 
@@ -46,14 +32,10 @@ bool Physics::areColliding(const EntityPtr &e1, const EntityPtr &e2) const {
 
 // Update the spatial partitioning based on entity positions
 void Physics::update(const std::vector<EntityPtr> &entities) {
-  for (auto &[cell, _] : entitiesByCell) {
-    _ = EntitiesSet(); // Clear existing entities in cell
-  }
-
-  for (const auto &entity : entities) {
-    Cell cell(entity->getPosition().x / cellSize,
-              entity->getPosition().y / cellSize);
-    entitiesByCell[cell].insert(entity);
+  spatialGrid.clear();
+  // Update entity positions and insert them into the grid
+  for (auto &entity : entities) {
+    spatialGrid.addEntity(entity);
   }
 }
 
@@ -80,4 +62,10 @@ Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
   }
 
   return collidingPairs;
+}
+
+std::shared_ptr<std::vector<EntityPtr>>
+Physics::getPotentiallyColliding(const EntityPtr &entity) {
+
+  return spatialGrid.getPotentialCollisions(entity);
 }
