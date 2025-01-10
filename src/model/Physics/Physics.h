@@ -68,7 +68,7 @@ public:
   std::unordered_set<EntityPair>
   getCollidingEntities(const std::vector<EntityPtr> &entities);
 
-  std::shared_ptr<std::vector<EntityPtr>>
+std::vector<EntityPtr>
   getPotentiallyColliding(const EntityPtr &entity);
 
   /**

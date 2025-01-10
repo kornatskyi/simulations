@@ -51,7 +51,7 @@ void Environment::handleCollisions() {
 
   for (auto &entity : entities) {
     auto collidingWith = physics->getPotentiallyColliding(entity);
-    for (auto &other : *collidingWith) {
+    for (auto &other : collidingWith) {
       EntityPair pair(entity, other);
       if (interacted.find(pair) != interacted.end()) {
         continue;

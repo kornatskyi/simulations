@@ -38,7 +38,7 @@ Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
 
     auto potentiallyCollidingWith = spatialGrid.getPotentialCollisions(entity);
 
-    for (auto ent : *potentiallyCollidingWith) {
+    for (auto ent : potentiallyCollidingWith) {
       if (spatialGrid.areColliding(entity, ent)) {
         collidingPairs.insert(EntityPair{entity, ent});
       }
@@ -48,7 +48,7 @@ Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
   return collidingPairs;
 }
 
-std::shared_ptr<std::vector<EntityPtr>>
+std::vector<EntityPtr>
 Physics::getPotentiallyColliding(const EntityPtr &entity) {
 
   return spatialGrid.getPotentialCollisions(entity);
