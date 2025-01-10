@@ -2,7 +2,8 @@
 
 #include <Aliases.h>
 #include <cmath>
-#include <map>
+#include <functional>
+#include <unordered_map>
 #include <memory>
 #include <model/Entity/Entity.h>
 #include <model/Physics/SpatialHashGrid.h>
@@ -42,30 +43,11 @@ public:
   explicit Physics(float cellSize = EnvConfig::getInstance().spatialCellSize);
 
   /**
-   * @brief Retrieves all occupied cells in the spatial grid.
-   *
-   * @return std::vector<Cell> A vector containing all cells that currently have
-   * entities.
-   */
-  std::vector<Cell> getCellsFromSpatialHash();
-
-  /**
    * @brief Gets the size of each cell in the spatial grid.
    *
    * @return float The cell size.
    */
   float getCellSize();
-
-  /**
-   * @brief Determines the cell coordinates for a given position.
-   *
-   * Converts a 2D position vector into its corresponding cell coordinates based
-   * on the grid's cell size.
-   *
-   * @param p The position vector.
-   * @return Cell The cell coordinates as a tuple of integers.
-   */
-  Cell getCell(Vector2 p);
 
   /**
    * @brief Identifies and returns all pairs of entities that are colliding.
@@ -100,15 +82,7 @@ public:
    */
   void update(const std::vector<EntityPtr> &entities);
 
-private:
-  /**
-   * @brief Maps cells to the set of entities contained within them.
-   *
-   * This spatial partitioning allows for efficient querying of potential
-   * collisions by limiting collision checks to entities within the same or
-   * neighboring cells.
-   */
-  EntityMap entitiesByCell;
+  void runOnInteraction(std::function<void()> myFunc);
 
   /**
    * @brief The size of each cell in the spatial grid.
@@ -122,6 +96,9 @@ private:
    * methods to query potential collisions based on spatial locality.
    */
   SpatialHashGrid spatialGrid;
+
+private:
+
 
   /**
    * @brief Determines if two entities are colliding.

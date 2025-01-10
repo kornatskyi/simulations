@@ -4,24 +4,8 @@
 // Constructor
 Physics::Physics(float cellSize) : cellSize(cellSize), spatialGrid(cellSize) {}
 
-std::vector<Cell> Physics::getCellsFromSpatialHash() {
-  std::vector<Cell> cells;
-
-  auto grid = spatialGrid.getGrid();
-  for (auto &pair : grid) {
-    auto index = spatialGrid.getCellIndex(pair.first);
-    cells.push_back(index);
-  }
-  return cells;
-}
-
 // Get cell size
 float Physics::getCellSize() { return cellSize; }
-
-// Get the cell corresponding to a specific position
-Cell Physics::getCell(Vector2 p) {
-  return Cell(p.x / cellSize, p.y / cellSize);
-}
 
 // Check if two entities are colliding
 bool Physics::areColliding(const EntityPtr &e1, const EntityPtr &e2) const {

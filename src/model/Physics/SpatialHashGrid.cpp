@@ -6,7 +6,7 @@
 
 SpatialHashGrid::SpatialHashGrid(float cellSize) : cellSize(cellSize) {}
 
-std::map<std::string, std::shared_ptr<std::vector<EntityPtr>>>
+std::unordered_map<std::string, std::shared_ptr<std::vector<EntityPtr>>>
 SpatialHashGrid::getGrid() {
   return grid;
 }
@@ -40,22 +40,25 @@ bool SpatialHashGrid::areColliding(EntityPtr a, EntityPtr b) {
 // Retrieves all potential collisions
 std::shared_ptr<std::vector<EntityPtr>>
 SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
-  std::set<EntityPtr> entities;
+  std::unordered_set<EntityPtr> entities;
 
   auto cellIndices = getCellIndices(entity);
 
   for (auto index : cellIndices) {
 
     if (grid.find(index) != grid.end()) {
-      auto cellEntities = grid.at(index);
 
-      for (auto cellEntity : *cellEntities) {
-        if (cellEntity != entity) {
-          entities.insert(cellEntity);
-        }
+      try {
+
+        auto cellEntities = grid[index];
+        entities.insert(cellEntities->begin(), cellEntities->end());
+      } catch (...) {
+        continue;
       }
     }
   }
+  entities.erase(entity);
+
   return std::make_shared<std::vector<EntityPtr>>(entities.begin(),
                                                   entities.end());
 }

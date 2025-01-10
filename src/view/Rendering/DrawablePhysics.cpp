@@ -1,4 +1,5 @@
 #include "DrawablePhysics.h"
+#include <tuple>
 
 // Constructor
 DrawablePhysics::DrawablePhysics(std::shared_ptr<Physics> physics)
@@ -8,9 +9,10 @@ DrawablePhysics::DrawablePhysics(std::shared_ptr<Physics> physics)
 void DrawablePhysics::draw(sf::RenderTarget &target,
                            sf::RenderStates states) const {
 
-  auto cells = physics->getCellsFromSpatialHash();
+  auto grid = physics->spatialGrid.getGrid();
+  for (auto &pair : grid) {
+    auto [i, j] = physics->spatialGrid.getCellIndex(pair.first);
 
-  for (auto &[i, j] : cells) {
     sf::RectangleShape rect(
         sf::Vector2f(physics->getCellSize(), physics->getCellSize()));
     rect.setPosition({i * physics->getCellSize(),
