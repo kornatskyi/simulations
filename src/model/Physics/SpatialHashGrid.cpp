@@ -34,7 +34,7 @@ std::vector<EntityPtr>
 SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
   std::unordered_set<EntityPtr> entities;
 
-  auto cellIndices = getCellIndices(entity);
+  auto cellIndices = getCellHashesByEntity(entity);
 
   for (auto index : cellIndices) {
     auto it = grid.find(index);
@@ -48,8 +48,8 @@ SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
   return std::vector<EntityPtr>(entities.begin(), entities.end());
 }
 
-// // Retrieves all potential collisions
-  std::unordered_set<EntityPair>SpatialHashGrid::getAllCollisionPairs() {
+// Retrieves all potential collisions
+std::unordered_set<EntityPair> SpatialHashGrid::getAllCollisionPairs() {
 
   std::unordered_set<EntityPair> pairs;
 
@@ -63,7 +63,6 @@ SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
   return pairs;
 }
 
-
 std::uint64_t SpatialHashGrid::hashCellIndices(int x, int y) {
   // shift x by 32 bits and combine
   return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(x)) << 32) |
@@ -71,14 +70,15 @@ std::uint64_t SpatialHashGrid::hashCellIndices(int x, int y) {
 }
 
 void SpatialHashGrid::addEntity(EntityPtr entity) {
-  auto cellIndices = getCellIndices(entity);
+  auto cellIndices = getCellHashesByEntity(entity);
 
   for (auto index : cellIndices) {
     grid[index].push_back(entity);
   }
 }
 
-std::vector<std::uint64_t> SpatialHashGrid::getCellIndices(EntityPtr entity) {
+
+std::vector<std::uint64_t> SpatialHashGrid::getCellHashesByEntity(EntityPtr entity) {
   std::set<std::uint64_t> indices;
 
   const float cellSize = EnvConfig::getInstance().spatialCellSize;

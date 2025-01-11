@@ -23,12 +23,16 @@ public:
   void addEntity(EntityPtr entity);
 
   std::unordered_map<std::uint64_t, std::vector<EntityPtr>> getGrid();
+
+  /// @brief converts cell's coordinates to hash value
   std::uint64_t hashCellIndices(int x, int y);
+
   std::tuple<int, int> unhashCellIndices(std::uint64_t cellKey);
 
 private:
   float cellSize;
   std::unordered_map<std::uint64_t, std::vector<EntityPtr>> grid;
 
-  std::vector<std::uint64_t> getCellIndices(EntityPtr entity);
+  // @brief returns all cells that this entity is occupying
+  std::vector<std::uint64_t> getCellHashesByEntity(EntityPtr entity);
 };
