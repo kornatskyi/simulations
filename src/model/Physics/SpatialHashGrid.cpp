@@ -48,8 +48,8 @@ SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
   return std::vector<EntityPtr>(entities.begin(), entities.end());
 }
 
-// Retrieves all potential collisions
-std::vector<EntityPair> SpatialHashGrid::getAllCollisionPairs() {
+// // Retrieves all potential collisions
+  std::unordered_set<EntityPair>SpatialHashGrid::getAllCollisionPairs() {
 
   std::unordered_set<EntityPair> pairs;
 
@@ -60,8 +60,9 @@ std::vector<EntityPair> SpatialHashGrid::getAllCollisionPairs() {
       }
     }
   }
-  return std::vector<EntityPair>(pairs.begin(), pairs.end());
+  return pairs;
 }
+
 
 std::uint64_t SpatialHashGrid::hashCellIndices(int x, int y) {
   // shift x by 32 bits and combine

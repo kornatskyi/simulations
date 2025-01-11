@@ -18,8 +18,7 @@ public:
   // Retrieves all potential collisions
   std::vector<EntityPtr> getPotentialCollisions(EntityPtr entity);
 
-  std::vector<EntityPair> getAllCollisionPairs();
-
+  std::unordered_set<EntityPair> getAllCollisionPairs();
 
   void addEntity(EntityPtr entity);
 

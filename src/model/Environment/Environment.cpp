@@ -114,28 +114,23 @@ void Environment::generateRandomEntities(unsigned int n) {
   std::uniform_int_distribution<> distX(0, Config::getInstance().width);
   std::uniform_int_distribution<> distY(0, Config::getInstance().height);
   std::uniform_int_distribution<> distAngle(0, 360);
+  std::uniform_real_distribution<> randDist(0, 1);
 
   for (unsigned int i = 0; i < n; ++i) {
     Vector2 position(distX(randomEngine), distY(randomEngine));
     int angle = distAngle(randomEngine);
+    float rand = randDist(randomEngine);
 
     std::shared_ptr<Entity> newEntity;
-    switch (i % 3) {
-    case 0: {
+    if (rand > 0.4) {
       newEntity = std::make_shared<Herbivore>(this);
       newEntity->setPosition(position).setAngle(angle);
-      break;
-    }
-    case 1: {
+    } else if (rand > 0.33) {
       newEntity = std::make_shared<Carnivore>(this);
       newEntity->setPosition(position).setAngle(angle);
-      break;
-    }
-    case 2: {
+    } else {
       newEntity = std::make_shared<Resource>(this);
       newEntity->setPosition(position).setAngle(angle).setSpeed(0);
-      break;
-    }
     }
     entities.push_back(newEntity);
   }
