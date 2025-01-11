@@ -11,7 +11,7 @@ void DrawablePhysics::draw(sf::RenderTarget &target,
 
   auto grid = physics->spatialGrid.getGrid();
   for (auto &pair : grid) {
-    auto [i, j] = physics->spatialGrid.getCellIndex(pair.first);
+    auto [i, j] = physics->spatialGrid.unhashCellIndices(pair.first);
 
     sf::RectangleShape rect(
         sf::Vector2f(physics->getCellSize(), physics->getCellSize()));

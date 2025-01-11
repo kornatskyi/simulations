@@ -49,21 +49,20 @@ void Environment::moveEntities(float elapsedTime) {
 void Environment::handleCollisions() {
   std::unordered_set<EntityPair> interacted;
 
-  for (auto &entity : entities) {
-    auto collidingWith = physics->getPotentiallyColliding(entity);
-    for (auto &other : collidingWith) {
-      EntityPair pair(entity, other);
-      if (interacted.find(pair) != interacted.end()) {
-        continue;
-      }
+  auto pairs = physics->spatialGrid.getAllCollisionPairs();
 
-      // Two-way interaction
-      entity->interact(other);
-      other->interact(entity);
-
-      // Mark these two as having interacted
-      interacted.insert(pair);
+  for (auto &pair : pairs) {
+    auto [e1, e2] = pair;
+    if (interacted.find(pair) != interacted.end()) {
+      continue;
     }
+
+    // Two-way interaction
+    e1->interact(e2);
+    e2->interact(e1);
+
+    // Mark these two as having interacted
+    // interacted.insert(pair);
   }
 }
 

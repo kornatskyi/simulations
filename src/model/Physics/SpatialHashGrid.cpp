@@ -6,24 +6,16 @@
 
 SpatialHashGrid::SpatialHashGrid(float cellSize) : cellSize(cellSize) {}
 
-std::unordered_map<std::string, std::vector<EntityPtr>>
+std::unordered_map<std::uint64_t, std::vector<EntityPtr>>
 SpatialHashGrid::getGrid() {
   return grid;
 }
 
-std::tuple<int, int> SpatialHashGrid::getCellIndex(std::string cellKey) {
-  std::istringstream stream(cellKey);
-  std::string xStr, yStr;
-
-  // Split the string by comma
-  std::getline(stream, xStr, ',');
-  std::getline(stream, yStr, ',');
-
-  // Convert to integers and return as tuple
-  int x = std::stoi(xStr);
-  int y = std::stoi(yStr);
-
-  return std::make_tuple(x, y);
+std::tuple<int, int> SpatialHashGrid::unhashCellIndices(std::uint64_t cellKey) {
+  // The upper 32 bits represent x, and the lower 32 bits represent y.
+  auto x = static_cast<int>(static_cast<std::uint32_t>(cellKey >> 32));
+  auto y = static_cast<int>(static_cast<std::uint32_t>(cellKey & 0xFFFFFFFF));
+  return std::tuple<int, int>(x, y);
 }
 
 void SpatialHashGrid::clear() { grid.clear(); }
@@ -56,8 +48,25 @@ SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
   return std::vector<EntityPtr>(entities.begin(), entities.end());
 }
 
-std::string SpatialHashGrid::getCellKey(int x, int y) {
-  return std::to_string(x) + "," + std::to_string(y);
+// Retrieves all potential collisions
+std::vector<EntityPair> SpatialHashGrid::getAllCollisionPairs() {
+
+  std::unordered_set<EntityPair> pairs;
+
+  for (auto &[key, value] : grid) {
+    for (size_t i = 0; i < value.size() - 1; i++) {
+      for (size_t j = i + 1; j < value.size(); j++) {
+        pairs.insert(EntityPair{value[i], value[j]});
+      }
+    }
+  }
+  return std::vector<EntityPair>(pairs.begin(), pairs.end());
+}
+
+std::uint64_t SpatialHashGrid::hashCellIndices(int x, int y) {
+  // shift x by 32 bits and combine
+  return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(x)) << 32) |
+         static_cast<std::uint32_t>(y);
 }
 
 void SpatialHashGrid::addEntity(EntityPtr entity) {
@@ -68,8 +77,8 @@ void SpatialHashGrid::addEntity(EntityPtr entity) {
   }
 }
 
-std::vector<std::string> SpatialHashGrid::getCellIndices(EntityPtr entity) {
-  std::set<std::string> indices;
+std::vector<std::uint64_t> SpatialHashGrid::getCellIndices(EntityPtr entity) {
+  std::set<std::uint64_t> indices;
 
   const float cellSize = EnvConfig::getInstance().spatialCellSize;
   const auto &pos = entity->getPosition();
@@ -90,9 +99,9 @@ std::vector<std::string> SpatialHashGrid::getCellIndices(EntityPtr entity) {
   // 3. Insert all touched cells
   for (int x = minCellX; x <= maxCellX; ++x) {
     for (int y = minCellY; y <= maxCellY; ++y) {
-      indices.insert(getCellKey(x, y - 1));
+      indices.insert(hashCellIndices(x, y - 1));
     }
   }
 
-  return std::vector<std::string>(indices.begin(), indices.end());
+  return std::vector<std::uint64_t>(indices.begin(), indices.end());
 }

@@ -17,15 +17,19 @@ public:
 
   // Retrieves all potential collisions
   std::vector<EntityPtr> getPotentialCollisions(EntityPtr entity);
+
+  std::vector<EntityPair> getAllCollisionPairs();
+
+
   void addEntity(EntityPtr entity);
 
-  std::unordered_map<std::string, std::vector<EntityPtr>> getGrid();
-  std::tuple<int, int> getCellIndex(std::string cellKey);
+  std::unordered_map<std::uint64_t, std::vector<EntityPtr>> getGrid();
+  std::uint64_t hashCellIndices(int x, int y);
+  std::tuple<int, int> unhashCellIndices(std::uint64_t cellKey);
 
 private:
   float cellSize;
-  std::unordered_map<std::string, std::vector<EntityPtr>> grid;
+  std::unordered_map<std::uint64_t, std::vector<EntityPtr>> grid;
 
-  std::string getCellKey(int x, int y);
-  std::vector<std::string> getCellIndices(EntityPtr entity);
+  std::vector<std::uint64_t> getCellIndices(EntityPtr entity);
 };
