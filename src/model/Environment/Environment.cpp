@@ -1,10 +1,12 @@
 #include "model/Environment/Environment.h"
 #include <Config.h>
+#include <cmath>
 #include <model/Entity/Carnivore.h>
 #include <model/Entity/Entity.h>
 #include <model/Entity/Herbivore.h>
 #include <model/Entity/Resource.h>
 #include <model/Physics/Physics.h>
+#include <utils/utils.h>
 
 Environment::Environment()
     : physics(std::make_shared<Physics>()),
@@ -60,13 +62,23 @@ void Environment::handleCollisions() {
       // Two-way interaction
       e1->interact(e2);
       e2->interact(e1);
+      auto p1 = e1->getPosition();
+      auto p2 = e2->getPosition();
 
-      
-      
+      auto c =
+          std::sqrt(std::pow((p1.x - p2.x), 2) + std::pow((p1.y - p2.y), 2));
+      auto diff = p1 - p2;
+      float r1 = e1->getRadius();
+      float r2 = e2->getRadius();
+      float overlap = (r1 + r2) - c;
+
+      if (overlap > 0.f) {
+        Vector2 n = diff / c; // normalized direction from p2 to p1
+        Vector2 correction = n * (overlap * 0.5f);
+        e1->setPosition(p1 + correction);
+        e2->setPosition(p2 - correction);
+      }
     }
-
-    // Mark these two as having interacted
-    // interacted.insert(pair);
   }
 }
 
@@ -126,7 +138,7 @@ void Environment::generateRandomEntities(unsigned int n) {
     float rand = randDist(randomEngine);
 
     std::shared_ptr<Entity> newEntity;
-    if (rand > 0.4) {
+    if (rand > 0) {
       newEntity = std::make_shared<Herbivore>(this);
       newEntity->setPosition(position).setAngle(angle);
     } else if (rand > 0.33) {
