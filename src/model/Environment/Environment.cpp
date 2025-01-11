@@ -56,9 +56,14 @@ void Environment::handleCollisions() {
       continue;
     }
 
-    // Two-way interaction
-    e1->interact(e2);
-    e2->interact(e1);
+    if (physics->areColliding(e1, e2)) {
+      // Two-way interaction
+      e1->interact(e2);
+      e2->interact(e1);
+
+      
+      
+    }
 
     // Mark these two as having interacted
     // interacted.insert(pair);
