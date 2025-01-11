@@ -21,8 +21,8 @@ void Herbivore::interact(std::shared_ptr<Entity> other) {
 
 // Reproduction logic
 std::shared_ptr<Entity> Herbivore::reproduce() {
-  if (energy > EnvConfig::getInstance().energyToSplit) {
-    energy -= EnvConfig::getInstance().energyToSplit;
+  if (energy > Config::getInstance().energyToSplit) {
+    energy -= Config::getInstance().energyToSplit;
     auto newEntity = std::make_shared<Herbivore>(env);
     newEntity->setPosition(position);
     return newEntity;

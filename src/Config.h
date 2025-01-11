@@ -3,19 +3,31 @@
 
 class Config {
 public:
-    static Config& getInstance();
-    
-    int width;
-    int height;
-    std::string title;
-    int defaultSeed;
-    bool drawBoundary;
-    bool drawPhysics;
-    bool genRandomEntities;
+  static Config &getInstance();
 
-    void loadFromFile(const std::string& filename);
-    void loadDefaults();
+  // general config
+  int width;
+  int height;
+  std::string title;
+
+  // utils
+  bool drawBoundary;
+  bool drawPhysics;
+
+  // entity and environemnt related
+  int defaultSeed;
+  bool genRandomEntities;
+  float entityRadius;
+  float entitySpeed;
+  float entityEnergy;
+  float entityMaxLifetime;
+  float entityMaxEnergyCapacity;
+  float energyToSplit;
+  float spatialCellSize;
+
+  void loadFromFile(const std::string &filename);
+  void loadDefaults();
 
 private:
-    Config();
+  Config();
 };

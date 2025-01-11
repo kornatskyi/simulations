@@ -30,8 +30,8 @@ EntityType Carnivore::getType() const { return EntityType::CARNIVORE; }
 
 // Reproduction logic
 std::shared_ptr<Entity> Carnivore::reproduce() {
-  if (energy > EnvConfig::getInstance().energyToSplit) {
-    energy -= EnvConfig::getInstance().energyToSplit;
+  if (energy > Config::getInstance().energyToSplit) {
+    energy -= Config::getInstance().energyToSplit;
 
     auto newEntity = std::make_shared<Carnivore>(env);
     newEntity->setPosition(position);

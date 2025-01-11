@@ -1,6 +1,6 @@
 #include "model/Environment/Environment.h"
 #include <Config.h>
-#include <EnvConfig.h>
+#include <Config.h>
 #include <model/Entity/Carnivore.h>
 #include <model/Entity/Entity.h>
 #include <model/Entity/Herbivore.h>

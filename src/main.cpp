@@ -72,7 +72,7 @@ int main() {
       }
     }
 
-    environment->update(0.01);
+    environment->update(0.1);
 
     // draw it
     window.clear();

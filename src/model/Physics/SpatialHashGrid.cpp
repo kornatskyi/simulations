@@ -81,7 +81,7 @@ void SpatialHashGrid::addEntity(EntityPtr entity) {
 std::vector<std::uint64_t> SpatialHashGrid::getCellHashesByEntity(EntityPtr entity) {
   std::set<std::uint64_t> indices;
 
-  const float cellSize = EnvConfig::getInstance().spatialCellSize;
+  const float cellSize = Config::getInstance().spatialCellSize;
   const auto &pos = entity->getPosition();
   const float radius = entity->getRadius();
 

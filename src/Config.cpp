@@ -17,6 +17,15 @@ void Config::loadDefaults() {
   drawBoundary = true;
   drawPhysics = true;
   genRandomEntities = true;
+
+  entityRadius = 20;
+  entitySpeed = 70;
+  entityEnergy = 10;
+  entityMaxLifetime = 60;
+  entityMaxEnergyCapacity = 10;
+  energyToSplit = 10;
+
+  spatialCellSize = 2.5 * entityRadius;
 }
 
 void Config::loadFromFile(const std::string &filename) {

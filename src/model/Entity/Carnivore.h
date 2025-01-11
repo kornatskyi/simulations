@@ -15,5 +15,5 @@ public:
   void die() override;
 
 private:
-  float lifetime = EnvConfig::getInstance().entityMaxLifetime;
+  float lifetime = Config::getInstance().entityMaxLifetime;
 };

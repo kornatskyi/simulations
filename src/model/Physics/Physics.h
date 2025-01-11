@@ -38,9 +38,9 @@ public:
    * configuration.
    *
    * @param cellSize The size of each cell in the spatial grid. Defaults to
-   *                 EnvConfig::getInstance().spatialCellSize.
+   *                 Config::getInstance().spatialCellSize.
    */
-  explicit Physics(float cellSize = EnvConfig::getInstance().spatialCellSize);
+  explicit Physics(float cellSize = Config::getInstance().spatialCellSize);
 
   /**
    * @brief Gets the size of each cell in the spatial grid.

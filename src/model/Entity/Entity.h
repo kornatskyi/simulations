@@ -1,6 +1,6 @@
 #pragma once
 
-#include <EnvConfig.h>
+#include <Config.h>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <memory>
@@ -59,10 +59,10 @@ public:
 
 protected:
   Vector2 position = Vector2(0, 0);
-  float speed = EnvConfig::getInstance().entitySpeed;
+  float speed = Config::getInstance().entitySpeed;
   float angle = 360;
-  float radius = EnvConfig::getInstance().entityRadius;
-  float energy = EnvConfig::getInstance().entityEnergy;
+  float radius = Config::getInstance().entityRadius;
+  float energy = Config::getInstance().entityEnergy;
   bool isAlive = true;
   Environment *env;
   EntityType type;

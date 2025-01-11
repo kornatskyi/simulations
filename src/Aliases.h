@@ -1,11 +1,11 @@
 #pragma once
 
 #include <cmath>
-#include <map>
 #include <memory>
 #include <model/Entity/Entity.h>
 #include <set>
 #include <tuple>
+#include <unordered_map>
 #include <unordered_set>
 #include <utils/utils.h>
 #include <vector>
@@ -24,27 +24,6 @@ using EntityPtr = std::shared_ptr<Entity>;
  * pair of entities.
  */
 using EntityPair = std::tuple<EntityPtr, EntityPtr>;
-
-/**
- * @typedef Cell
- * @brief Alias for a tuple containing two integers, representing a grid cell's
- * coordinates.
- */
-using Cell = std::tuple<int, int>;
-
-/**
- * @typedef EntitiesSet
- * @brief Alias for a set of EntityPtr objects, representing entities within a
- * cell.
- */
-using EntitiesSet = std::set<EntityPtr>;
-
-/**
- * @typedef EntityMap
- * @brief Alias for a map that associates a Cell with its corresponding
- * EntitiesSet.
- */
-using EntityMap = std::map<Cell, EntitiesSet>;
 
 // Utility Functions
 
