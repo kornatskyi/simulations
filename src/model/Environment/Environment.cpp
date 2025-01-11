@@ -1,6 +1,5 @@
 #include "model/Environment/Environment.h"
 #include <Config.h>
-#include <Config.h>
 #include <model/Entity/Carnivore.h>
 #include <model/Entity/Entity.h>
 #include <model/Entity/Herbivore.h>
@@ -49,7 +48,7 @@ void Environment::moveEntities(float elapsedTime) {
 void Environment::handleCollisions() {
   std::unordered_set<EntityPair> interacted;
 
-  auto pairs = physics->spatialGrid.getAllCollisionPairs();
+  auto pairs = physics->getAllCollidingPairs();
 
   for (auto &pair : pairs) {
     auto [e1, e2] = pair;

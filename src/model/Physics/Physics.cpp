@@ -23,33 +23,6 @@ void Physics::update(const std::vector<EntityPtr> &entities) {
   }
 }
 
-std::unordered_set<EntityPair>
-Physics::getCollidingEntities(const std::vector<EntityPtr> &entities) {
-
-  spatialGrid.clear();
-  // Update entity positions and insert them into the grid
-  for (auto &entity : entities) {
-    spatialGrid.addEntity(entity);
-  }
-
-  std::unordered_set<EntityPair> collidingPairs;
-
-  for (auto &entity : entities) {
-
-    auto potentiallyCollidingWith = spatialGrid.getPotentialCollisions(entity);
-
-    for (auto ent : potentiallyCollidingWith) {
-      if (spatialGrid.areColliding(entity, ent)) {
-        collidingPairs.insert(EntityPair{entity, ent});
-      }
-    }
-  }
-
-  return collidingPairs;
-}
-
-std::vector<EntityPtr>
-Physics::getPotentiallyColliding(const EntityPtr &entity) {
-
-  return spatialGrid.getPotentialCollisions(entity);
+std::unordered_set<EntityPair> Physics::getAllCollidingPairs() {
+  return spatialGrid.getAllCollidingPairs();
 }

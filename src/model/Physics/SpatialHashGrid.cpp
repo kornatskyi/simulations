@@ -11,24 +11,6 @@ SpatialHashGrid::getGrid() {
   return grid;
 }
 
-std::tuple<int, int> SpatialHashGrid::unhashCellIndices(std::uint64_t cellKey) {
-  // The upper 32 bits represent x, and the lower 32 bits represent y.
-  auto x = static_cast<int>(static_cast<std::uint32_t>(cellKey >> 32));
-  auto y = static_cast<int>(static_cast<std::uint32_t>(cellKey & 0xFFFFFFFF));
-  return std::tuple<int, int>(x, y);
-}
-
-void SpatialHashGrid::clear() { grid.clear(); }
-
-bool SpatialHashGrid::areColliding(EntityPtr a, EntityPtr b) {
-  float dx = a->getPosition().x - b->getPosition().x;
-  float dy = a->getPosition().y - b->getPosition().y;
-  float distanceSquared = dx * dx + dy * dy;
-
-  float radiusSum = a->getRadius() + b->getRadius();
-  return distanceSquared < (radiusSum * radiusSum);
-}
-
 // Retrieves all potential collisions
 std::vector<EntityPtr>
 SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
@@ -49,7 +31,7 @@ SpatialHashGrid::getPotentialCollisions(EntityPtr entity) {
 }
 
 // Retrieves all potential collisions
-std::unordered_set<EntityPair> SpatialHashGrid::getAllCollisionPairs() {
+std::unordered_set<EntityPair> SpatialHashGrid::getAllCollidingPairs() {
 
   std::unordered_set<EntityPair> pairs;
 
@@ -63,22 +45,8 @@ std::unordered_set<EntityPair> SpatialHashGrid::getAllCollisionPairs() {
   return pairs;
 }
 
-std::uint64_t SpatialHashGrid::hashCellIndices(int x, int y) {
-  // shift x by 32 bits and combine
-  return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(x)) << 32) |
-         static_cast<std::uint32_t>(y);
-}
-
-void SpatialHashGrid::addEntity(EntityPtr entity) {
-  auto cellIndices = getCellHashesByEntity(entity);
-
-  for (auto index : cellIndices) {
-    grid[index].push_back(entity);
-  }
-}
-
-
-std::vector<std::uint64_t> SpatialHashGrid::getCellHashesByEntity(EntityPtr entity) {
+std::vector<std::uint64_t>
+SpatialHashGrid::getCellHashesByEntity(EntityPtr entity) {
   std::set<std::uint64_t> indices;
 
   const float cellSize = Config::getInstance().spatialCellSize;
@@ -106,3 +74,26 @@ std::vector<std::uint64_t> SpatialHashGrid::getCellHashesByEntity(EntityPtr enti
 
   return std::vector<std::uint64_t>(indices.begin(), indices.end());
 }
+
+std::uint64_t SpatialHashGrid::hashCellIndices(int x, int y) {
+  // shift x by 32 bits and combine
+  return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(x)) << 32) |
+         static_cast<std::uint32_t>(y);
+}
+
+std::tuple<int, int> SpatialHashGrid::unhashCellIndices(std::uint64_t cellKey) {
+  // The upper 32 bits represent x, and the lower 32 bits represent y.
+  auto x = static_cast<int>(static_cast<std::uint32_t>(cellKey >> 32));
+  auto y = static_cast<int>(static_cast<std::uint32_t>(cellKey & 0xFFFFFFFF));
+  return std::tuple<int, int>(x, y);
+}
+
+void SpatialHashGrid::addEntity(EntityPtr entity) {
+  auto cellIndices = getCellHashesByEntity(entity);
+
+  for (auto index : cellIndices) {
+    grid[index].push_back(entity);
+  }
+}
+
+void SpatialHashGrid::clear() { grid.clear(); }

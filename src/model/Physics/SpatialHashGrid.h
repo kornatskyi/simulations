@@ -11,14 +11,13 @@ class SpatialHashGrid {
 public:
   SpatialHashGrid(float cellSize);
 
+  //Reset spatial grid
   void clear();
-
-  bool areColliding(EntityPtr a, EntityPtr b);
 
   // Retrieves all potential collisions
   std::vector<EntityPtr> getPotentialCollisions(EntityPtr entity);
 
-  std::unordered_set<EntityPair> getAllCollisionPairs();
+  std::unordered_set<EntityPair> getAllCollidingPairs();
 
   void addEntity(EntityPtr entity);
 
